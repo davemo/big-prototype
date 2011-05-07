@@ -3,8 +3,10 @@
   BIG.contentContainer = "#body";
   
   BIG._defaultNavs = [
-    'Home #/home', 
-    'Comparison Tool #/compare' 
+    'Home #/home',
+    'Countries #/country', 
+    'Companies #/company',
+    'Comparison #/compare' 
   ];
     
   BIG._renderSearchBox = function(container, type, placeholder) {
@@ -34,30 +36,65 @@
   BIG.Controller = new (Backbone.Controller.extend({
     routes: {
       '/home'          : 'homeRoute',
-      '/country/:name' : 'countryProfile',
+      '/country'       : 'listCountries',
+      '/country/:id'   :  'countryProfile',
+      '/company'       : 'listCompanies',
+      '/company/:id'   : 'companyProfile',
       '*actions'       : 'defaultRoute'
     },
     
     homeRoute: function() {
-      
+      new BIG.Views.Home().render();
     },
     
-    countryProfile: function(country) {
-      var c = BIG.Countries.get(country);
-      new BIG.Views.Country({ model: c }).render();
+    listCompanies: function() {
+      new BIG.Views.List({
+        type: 'company',
+        entities: BIG.Companies.toJSON()
+      }).render('View Companies');
+    },
+    
+    listCountries: function() {
+      new BIG.Views.List({
+        type: 'country',
+        entities: BIG.Countries.toJSON() 
+      }).render('View Countries');
+    },
+    
+    countryProfile: function(id) {
+      var c = BIG.Countries.get(id);
+      if(c) {
+        new BIG.Views.Country({ model: c }).render();
+      } else {
+        new BIG.Views.Error().render({
+          title: 'Oops...',
+          details: 'We couldnt load country data for ' + id
+        });
+      }
+    },
+    
+    companyProfile: function(id) {
+      var c = BIG.Companies.get(id);
+       if(c) {
+          new BIG.Views.Company({ model: c }).render();
+        } else {
+          new BIG.Views.Error().render({
+            title: 'Oops...',
+            details: 'We couldnt load company data for ' + id
+          });
+        }
     },
     
     defaultRoute: function(actions) {
       
     }
   }))();
+
+  Backbone.history.start();
   
   BIG.init = (function() {
-    //BIG._loadInitialData();
     BIG._renderSearchBox('#header', 'header', 'Search Companies, Industries, and Countries...');
     BIG._renderNav('#main-nav', BIG._defaultNavs);
-  })();
-  
-  Backbone.history.start();
+  })();  
   
 })(jQuery, BIG);

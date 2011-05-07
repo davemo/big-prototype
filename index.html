@@ -40,19 +40,28 @@
       <input type="text" placeholder="<%= placeholder %>" />
     </div>
   </script>
+  
+  <script id="list-template" type="text/html">
+    <h3><%= title %></h3>
+    <ul class="results">
+      <% _.each(results, function(result) { %>
+        <li><a href="<%= result.href %>"><%= result.display %></a></li>
+      <% }); %>
+    </ul>
+  </script>
 
   <script id="nav-template" type="text/html">
     <li><a href="<%= link %>"><%= name %></a></li>
   </script>
 
   <script id="home-template" type="text/html">
-
+    <img src="img/home.jpg" />
   </script>
 
-  <script id="country-template" type="text/html">
+  <script id="overview-template" type="text/html">
     <article class="country-overview">
       <h3><%= name %></h3>
-      <p class="type">Country Overview</p>
+      <p class="type"><%= overviewType %> Overview</p>
       <% _.each(overview, function(paragraph) { %>
         <p><%= paragraph %></p>
       <% }); %>
