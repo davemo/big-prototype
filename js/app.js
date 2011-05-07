@@ -44,10 +44,11 @@
     
     countryProfile: function(country) {
       var c = BIG.Countries.get(country);
-      // $(BIG.contentContainer).html("").append(_.template($("#country-template").html(), {
-      //   name: c ? c.name : "Oops... ",
-      //   overview: c ? c.overview.split("\n") : ["We don't have data for " + country.toUpperCase() + " yet."]
-      // }));
+      var CountryView = new BIG.Views.Country({
+        el: '#body',
+        model: c
+      });
+      CountryView.render();
     },
     
     defaultRoute: function(actions) {
