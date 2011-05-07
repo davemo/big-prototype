@@ -43,7 +43,7 @@
   };
   
   BIG._loadInitialData = function() {
-    _.each(['country', 'company', 'search'], function(type) {
+    _.each(['countries', 'companies', 'results'], function(type) {
       $.getJSON('/static-data/' + type + '.js', function(response) {
         _.each(response, function(item) {
           BIG.store.put([type,item.name.toLowerCase()].join(":"), item);
