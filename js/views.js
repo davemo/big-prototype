@@ -146,7 +146,7 @@
       
       search: function(e) {
         if(e.keyCode === 13) {
-          
+          console.log("ENTER");
         }
       }
       

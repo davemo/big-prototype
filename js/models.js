@@ -11,6 +11,8 @@
       }
     }),
     
+    WBCountry: Backbone.Model.extend({}),
+    
     Company: Backbone.Model.extend({
       defaults: {
         name: 'DEFAULT COMPANY',
@@ -43,12 +45,17 @@
     Results: Backbone.Collection.extend({
       model: BIG.Models.Result,
       localStorage: new Store("results")
+    }),
+    WBCountries: Backbone.Collection.extend({
+      model: BIG.Models.WBCountry,
+      localStorage: new Store("wbcountries")
     })
   };
    
-  BIG.Countries = new BIG.Collections.Countries;
-  BIG.Companies = new BIG.Collections.Companies;
-  BIG.Results   = new BIG.Collections.Results;
+  BIG.Countries   = new BIG.Collections.Countries;
+  BIG.WBCountries = new BIG.Collections.WBCountries
+  BIG.Companies   = new BIG.Collections.Companies;
+  BIG.Results     = new BIG.Collections.Results;
   
   BIG._loadData = function() {
     _.each(
@@ -58,7 +65,7 @@
         { collection: 'Results',   model: BIG.Models.Result  }
       ], 
       function(dataType) {
-        $.getJSON('/static-data/' + dataType.collection.toLowerCase() + '.js', function(response) {
+        $.getJSON('static-data/' + dataType.collection.toLowerCase() + '.js', function(response) {
           _.each(response, function(entityData) {
             var entity = new dataType.model(entityData);
             B[dataType.collection].add(entity);
@@ -68,6 +75,23 @@
       }
     );
   };
+  
+  BIG._loadWBData = function() {
+    _.each(
+      [
+        { collection: "Countries", model: BIG.Models.WBCountry }
+      ],
+      function(dataType) {
+        $.getJSON('static-data/wb.' + dataType.collection.toLowerCase() + '.json', function(response) {
+          _.each(response, function(entityData) {
+            var entity = new dataType.model(entityData);
+            B["WB" + dataType.collection].add(entity);
+            entity.save();
+          });
+        });      
+      }
+    );
+  }
   
   BIG._clearData = function() {
     window.localStorage.clear();
