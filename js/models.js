@@ -31,27 +31,26 @@
     })
   };
   
-  BIG.Collections = {};
-  BIG.Collections.Countries = Backbone.Collection.extend({
-    model: BIG.Models.Country,
-    localStorage: new Store("countries")
-  });
- 
-  BIG.Collections.Companies = Backbone.Collection.extend({
-    model: BIG.Models.Company,
-    localStorage: new Store("companies")
-  });
-  
-  BIG.Collections.Results = Backbone.Collection.extend({
-    model: BIG.Models.Result,
-    localStorage: new Store("results")
-  }); 
+  BIG.Collections = {
+    Countries: Backbone.Collection.extend({
+      model: BIG.Models.Country,
+      localStorage: new Store("countries")
+    }),
+    Companies: Backbone.Collection.extend({
+      model: BIG.Models.Company,
+      localStorage: new Store("companies")
+    }),
+    Results: Backbone.Collection.extend({
+      model: BIG.Models.Result,
+      localStorage: new Store("results")
+    })
+  };
    
   BIG.Countries = new BIG.Collections.Countries;
   BIG.Companies = new BIG.Collections.Companies;
   BIG.Results   = new BIG.Collections.Results;
   
-  BIG._loadBackboneData = function() {
+  BIG._loadData = function() {
     _.each(
       [
         { collection: 'Countries', model: BIG.Models.Country }, 
@@ -69,39 +68,5 @@
       }
     );
   };
-  
-  // 
-  // BIG.Views = {
-  //   Country: Backbone.View.extend({
-  //     
-  //     tagName: "article",
-  //     
-  //     template: _.template($("#country-template").html()),
-  //     
-  //     initialize: function() {
-  //       _.bindAll(this, 'render');
-  //     },
-  //     
-  //     render: function() {
-  //       $(this.el).html(this.template(this.model.toJSON()));
-  //     }
-  //   }),
-  //   
-  //   Company: Backbone.View.extend({
-  //     
-  //     tagName: "article",
-  //     
-  //     template: _.template($("#company-template").html()),
-  //     
-  //     initialize: function() {
-  //       _.bindAll(this, 'render');
-  //     },
-  //     
-  //     render: function() {
-  //       $(this.el).html(this.template(this.model.toJSON()));
-  //     }
-  //     
-  //   })
-  // };
   
 })(jQuery, BIG);

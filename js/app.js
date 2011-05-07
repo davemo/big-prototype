@@ -1,21 +1,6 @@
-(function($) {
+(function($, BIG) {
   
-  BIG = {
-    contentContainer: "#body"
-  };
-  
-  BIG.store = {
-    put: function(key, val, callback) {
-      localStorage.setItem(key, JSON.stringify(val));
-      if(typeof(callback) === 'function') {
-        callback();
-      }
-    },
-    
-    get: function(key, callback) {
-      return JSON.parse(localStorage.getItem(key));
-    }
-  };
+  BIG.contentContainer = "#body";
   
   BIG._defaultNavs = [
     'Home #/home', 
@@ -42,16 +27,10 @@
     $(container).append(rendered);
   };
   
-  BIG._loadInitialData = function() {
-    _.each(['countries', 'companies', 'results'], function(type) {
-      $.getJSON('/static-data/' + type + '.js', function(response) {
-        _.each(response, function(item) {
-          BIG.store.put([type,item.name.toLowerCase()].join(":"), item);
-        });
-      });
-    });
-  };
-  
+  _.each([BIG.Countries, BIG.Companies, BIG.Results], function(collection) {
+    collection.fetch();
+  });
+    
   BIG.Controller = new (Backbone.Controller.extend({
     routes: {
       '/home'          : 'homeRoute',
@@ -64,15 +43,15 @@
     },
     
     countryProfile: function(country) {
-      var c = BIG.store.get('country:' + country);
-      $(BIG.contentContainer).html("").append(_.template($("#country-template").html(), {
-        name: c ? c.name : "Oops... ",
-        overview: c ? c.overview.split("\n") : ["We don't have data for " + country.toUpperCase() + " yet."]
-      }));
+      var c = BIG.Countries.get(country);
+      // $(BIG.contentContainer).html("").append(_.template($("#country-template").html(), {
+      //   name: c ? c.name : "Oops... ",
+      //   overview: c ? c.overview.split("\n") : ["We don't have data for " + country.toUpperCase() + " yet."]
+      // }));
     },
     
     defaultRoute: function(actions) {
-
+      
     }
   }))();
   
@@ -80,9 +59,8 @@
     //BIG._loadInitialData();
     BIG._renderSearchBox('#header', 'header', 'Search Companies, Industries, and Countries...');
     BIG._renderNav('#main-nav', BIG._defaultNavs);
-    $.publish('big/loaded');
   })();
   
   Backbone.history.start();
   
-})(jQuery);
+})(jQuery, BIG);
