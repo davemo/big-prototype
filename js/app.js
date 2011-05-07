@@ -44,11 +44,7 @@
     
     countryProfile: function(country) {
       var c = BIG.Countries.get(country);
-      var CountryView = new BIG.Views.Country({
-        el: '#body',
-        model: c
-      });
-      CountryView.render();
+      new BIG.Views.Country({ model: c }).render();
     },
     
     defaultRoute: function(actions) {
