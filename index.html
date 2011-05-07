@@ -38,7 +38,14 @@
   <script id="search-template" type="text/html">
     <div id="search-<%= type %>">
       <input type="text" placeholder="<%= placeholder %>" />
+      <ul class="results"></ul>
     </div>
+  </script>
+  
+  <script id="search-results-template" type="text/html">
+    <% _.each(results, function(result) { %>
+      <li><a href='<%= result.href %>'><%= result.display %></a></li>
+    <% }); %>
   </script>
   
   <script id="list-template" type="text/html">

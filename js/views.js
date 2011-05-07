@@ -96,7 +96,7 @@
         $(self.el).html(self.template());
         new Highcharts.Chart({
           chart: {
-              renderTo: 'chart-container',
+              renderTo: 'chart-container'
            },
            title: {
               text: 'Fruit Consumption'
@@ -131,6 +131,8 @@
       
       template: _.template($("#search-template").html()),
       
+      resultsTemplate: _.template($("#search-results-template").html()),
+      
       initialize: function(opts) {
         this.type = opts.type;
         this.placeholder = opts.placeholder;
@@ -146,7 +148,15 @@
       
       search: function(e) {
         if(e.keyCode === 13) {
-          console.log("ENTER");
+          debugger;
+          var query = this.$('input').val();
+          $(this.el).find('.results').html(this.resultsTemplate({
+            results: _.map(_.select(BIG.WBCountries.toJSON(), function(country) {
+              return country.name.match(query + '*');
+            }), function(country) {
+              return { href: '#/country/' + country.id, display: country.name };
+            })
+          }));
         }
       }
       

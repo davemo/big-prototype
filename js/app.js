@@ -102,6 +102,7 @@
   Backbone.history.start();
   
   BIG.init = (function() {
+    // get rid of this stuff
     BIG._renderSearchBox('#header', 'header', 'Search Companies, Industries, and Countries...');
     BIG._renderNav('#main-nav', BIG._defaultNavs);
   })();  
