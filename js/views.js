@@ -86,12 +86,68 @@
       
       template: _.template($("#chart-template").html()),
       
-      initialize: function() {
+      initialize: function(chartSeries) {
         _.bindAll(this, 'render');
+        this.chartSeries = chartSeries;
       },
       
       render: function() {
-        $(this.el).html(this.template());
+        var self = this;
+        $(self.el).html(self.template());
+        new Highcharts.Chart({
+          chart: {
+              renderTo: 'chart-container',
+           },
+           title: {
+              text: 'Fruit Consumption'
+           },
+           xAxis: {
+              categories: ['Apples', 'Bananas', 'Oranges']
+           },
+           yAxis: {
+              title: {
+                 text: 'Fruit eaten'
+              }
+           },
+           series: [{
+              name: 'Jane',
+              data: [1, 0, 4]
+           }, {
+              name: 'John',
+              data: [5, 7, 3]
+           }]
+        });
+      }
+      
+    }),
+    
+    ChartSearch: Backbone.View.extend({
+      
+      el: '#chart .controls .search',
+      
+      events: {
+        "keydown input" : "search"
+      },
+      
+      template: _.template($("#search-template").html()),
+      
+      initialize: function(opts) {
+        this.type = opts.type;
+        this.placeholder = opts.placeholder;
+      },
+      
+      render: function() {
+        var self = this;
+        $(this.el).html(this.template({
+          type: self.type,
+          placeholder: self.placeholder
+        }));
+      },
+      
+      search: function(e) {
+        if(e.keyCode === 13) {
+          
+        }
       }
       
     }),

@@ -88,6 +88,10 @@
     
     chart: function() {
       new BIG.Views.Chart().render();
+      new BIG.Views.ChartSearch({
+        type: 'chart',
+        placeholder: 'Search for Countries...'
+      }).render();
     },
     
     defaultRoute: function(actions) {

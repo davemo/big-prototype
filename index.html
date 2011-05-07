@@ -59,8 +59,13 @@
   </script>
   
   <script id="chart-template" type="text/html">
-    <h3>Chart View</h3>
-    <p>Charts!</p>
+    <div id="chart">
+      <div class="controls">
+        <div class="search"></div>
+      </div>
+      <h3>Charting</h3>
+      <div id="chart-container"></div>
+    </div>
   </script>
 
   <script id="overview-template" type="text/html">
@@ -71,10 +76,6 @@
         <p><%= paragraph %></p>
       <% }); %>
     </article>
-  </script>
-  
-  <script id="company-template" type="text/html">
-  
   </script>
   
   <script id="error-template" type="text/html">

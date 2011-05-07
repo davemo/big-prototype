@@ -224,6 +224,14 @@ body {
   height: 40px;
 }
 
+#chart .controls {
+  float: right;
+}
+
+#search-chart input {
+  width: 150px;
+}
+
 /** content types **/
 
 article p {
