@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Business Insights: Global</title>
+  <link rel="stylesheet" type="text/css" href="css/big.css" media="all">
+</head>
+<body>
+  
+  <div id="stripe"></div>
+  
+  <div id="wrap">
+    
+    <div id="header" class="wrap">
+      <h1 id="logo"><a href="#/home">Business Insights: Global</a></h1>
+      <h2 id="tagline">Your digital resource for company data and information from around the world.</h2>
+    </div>
+
+    <ul id="main-nav" class="nav"></ul>
+
+    <div id="body"></div>
+
+    <div id="footer">
+      <span id="cengage">Cengage Learning</span>
+      <ul id="footer-nav" class="nav">
+        <li><a href="#">About Business Insights</a></li>
+        <li><a href="#">About Cengage Learning</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Copyright</a></li>
+        <li><a href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+    
+  </div>  
+  
+  <!-- Templates -->
+  <script id="search-template" type="text/html">
+    <div id="search-<%= type %>">
+      <input type="text" placeholder="<%= placeholder %>" />
+    </div>
+  </script>
+
+  <script id="nav-template" type="text/html">
+    <li><a href="<%= link %>"><%= name %></a></li>
+  </script>
+
+  <script id="home-template" type="text/html">
+
+  </script>
+
+  <script id="country-template" type="text/html">
+    <article class="country-overview">
+      <h3><%= name %></h3>
+      <p class="type">Country Overview</p>
+      <% _.each(overview, function(paragraph) { %>
+        <p><%= paragraph %></p>
+      <% }); %>
+    </article>
+  </script>
+  
+  <!-- core libs -->
+  <script type="text/javascript" src="js/lib/jquery.js"></script>
+  <script type="text/javascript" src="js/lib/jquery.pubsub.js"></script>
+  <script type="text/javascript" src="js/lib/underscore.js"></script>
+  <script type="text/javascript" src="js/lib/backbone.js"></script>
+  
+  <!-- app -->
+  <script type="text/javascript" src="js/app.js"></script>
+  
+</body>
+</html>
