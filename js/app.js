@@ -5,7 +5,6 @@
   BIG._defaultNavs = [
     'Home #/home',
     'Countries #/country', 
-    'Companies #/company',
     'Charting #/chart' 
   ];
     
@@ -38,8 +37,6 @@
       '/home'          : 'homeRoute',
       '/country'       : 'listCountries',
       '/country/:id'   : 'countryProfile',
-      '/company'       : 'listCompanies',
-      '/company/:id'   : 'companyProfile',
       '/chart'         : 'chart',
       '*actions'       : 'defaultRoute'
     },
@@ -72,18 +69,6 @@
           details: 'We couldnt load country data for ' + id
         });
       }
-    },
-    
-    companyProfile: function(id) {
-      var c = BIG.Companies.get(id);
-       if(c) {
-          new BIG.Views.Company({ model: c }).render();
-        } else {
-          new BIG.Views.Error().render({
-            title: 'Oops...',
-            details: 'We couldnt load company data for ' + id
-          });
-        }
     },
     
     chart: function() {

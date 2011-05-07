@@ -195,6 +195,7 @@ body {
   border: 1px solid #ccb99f;
   background: white;
   margin-top: 16px;
+  overflow: hidden;
 }
 
 #footer {
@@ -228,8 +229,41 @@ body {
   float: right;
 }
 
-#search-chart input {
-  width: 150px;
+#chart .search {
+  width: 200px;
+}
+
+#chart .search input {
+  width: 100%;
+}
+
+#chart .search .results {
+  position: relative;
+  z-index: 1;
+}
+
+#map {
+  width: 650px;
+  height: 400px;
+  border: 1px solid black;
+}
+
+.country.sidebar {
+  float: right;
+  width: 250px;
+}
+
+.country.sidebar .info {
+  color: #9D9C9C;
+  display: block;
+  width: 100%;
+  font-size: 0.9em;
+  margin-top: 8px;
+}
+
+.country.sidebar .info-item {
+  float: right;
+  color: #3f3f3f;
 }
 
 /** content types **/

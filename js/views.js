@@ -15,33 +15,18 @@
       },
 
       render: function() {
-        var o = this.model.toJSON();
+        var country = this.model.toJSON();
         $(this.el).html(this.template({
-          name: o.name,
-          overview: o.overview.split("\n"),
-          overviewType: 'Country'
+          country: country,
+          type: 'Country'
         }));
-      }
-    }),
-
-    Company: Backbone.View.extend({
-
-      tagName: "article",
-      el: '#body',
-
-      template: _.template($("#overview-template").html()),
-
-      initialize: function() {
-        _.bindAll(this, 'render');
-      },
-
-      render: function() {
-        var o = this.model.toJSON();
-        $(this.el).html(this.template({
-          name: o.name,
-          overview: o.overview.split("\n"),
-          overviewType: 'Company'
-        }));
+        if(country.latitude && country.longitude) {
+          new google.maps.Map($("#map")[0], {
+            zoom: 6,
+            center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          });
+        }
       }
       
     }),
@@ -147,11 +132,10 @@
       },
       
       search: function(e) {
-        if(e.keyCode === 13) {
-          debugger;
+        if(e.keyCode === 13 && this.$('input').val() !== '') {
           var query = this.$('input').val();
           $(this.el).find('.results').html(this.resultsTemplate({
-            results: _.map(_.select(BIG.WBCountries.toJSON(), function(country) {
+            results: _.map(_.select(BIG.Countries.toJSON(), function(country) {
               return country.name.match(query + '*');
             }), function(country) {
               return { href: '#/country/' + country.id, display: country.name };
