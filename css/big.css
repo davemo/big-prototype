@@ -84,11 +84,15 @@ body {
   background-image:         linear-gradient(top, white, #f3dcbd);
             filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='white', EndColorStr='#f3dcbd'); 
   background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 100%;
+  overflow-y:auto;
+  overflow-x : hidden;
+  position:relative; 
+  padding :0;
   margin: 0;
   color: #3F3F3F;
   font: 100% Arial, Helvetica, sans-serif;	
-  background-attachment: fixed;
 }
 
 #header {

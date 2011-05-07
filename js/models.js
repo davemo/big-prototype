@@ -7,7 +7,7 @@
         overview: 'DEFAULT COUNTRY OVERVIEW'
       },
       initialize: function() {
-        console.log("Country model initialized");
+        //console.log("Country model initialized");
       }
     }),
     
@@ -17,7 +17,7 @@
         overview: 'DEFAULT COMPANY OVERVIEW'
       },
       initialize: function() {
-        console.log("Company model initialized");
+        //console.log("Company model initialized");
       }
     }),
     
@@ -26,7 +26,7 @@
         name: 'DEFAULT RESULT'
       },
       initialize: function() {
-        console.log("Result model initialized");
+        //console.log("Result model initialized");
       }
     })
   };
@@ -67,6 +67,10 @@
         });
       }
     );
+  };
+  
+  BIG._clearData = function() {
+    window.localStorage.clear();
   };
   
 })(jQuery, BIG);

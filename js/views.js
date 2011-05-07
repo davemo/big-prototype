@@ -70,7 +70,23 @@
       
       template: _.template($("#home-template").html()),
       
-      initialize: function(entities) {
+      initialize: function() {
+        _.bindAll(this, 'render');
+      },
+      
+      render: function() {
+        $(this.el).html(this.template());
+      }
+      
+    }),
+    
+    Chart: Backbone.View.extend({
+      
+      el: '#body',
+      
+      template: _.template($("#chart-template").html()),
+      
+      initialize: function() {
         _.bindAll(this, 'render');
       },
       

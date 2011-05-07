@@ -6,7 +6,7 @@
     'Home #/home',
     'Countries #/country', 
     'Companies #/company',
-    'Comparison #/compare' 
+    'Charting #/chart' 
   ];
     
   BIG._renderSearchBox = function(container, type, placeholder) {
@@ -37,9 +37,10 @@
     routes: {
       '/home'          : 'homeRoute',
       '/country'       : 'listCountries',
-      '/country/:id'   :  'countryProfile',
+      '/country/:id'   : 'countryProfile',
       '/company'       : 'listCompanies',
       '/company/:id'   : 'companyProfile',
+      '/chart'         : 'chart',
       '*actions'       : 'defaultRoute'
     },
     
@@ -83,6 +84,10 @@
             details: 'We couldnt load company data for ' + id
           });
         }
+    },
+    
+    chart: function() {
+      new BIG.Views.Chart().render();
     },
     
     defaultRoute: function(actions) {

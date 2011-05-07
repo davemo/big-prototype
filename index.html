@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Business Insights: Global</title>
-  <link rel="stylesheet" type="text/css" href="css/big.css" media="all">
+  <link rel="stylesheet" type="text/css" href="css/big.css" media="all">  
 </head>
 <body id="big">
   
@@ -57,6 +57,11 @@
   <script id="home-template" type="text/html">
     <img src="img/home.jpg" />
   </script>
+  
+  <script id="chart-template" type="text/html">
+    <h3>Chart View</h3>
+    <p>Charts!</p>
+  </script>
 
   <script id="overview-template" type="text/html">
     <article class="country-overview">
@@ -80,11 +85,15 @@
   </script>
   
   <!-- core libs -->
+  <script type="text/javascript" src="js/lib/json2.js"></script>
   <script type="text/javascript" src="js/lib/jquery.js"></script>
   <script type="text/javascript" src="js/lib/jquery.pubsub.js"></script>
   <script type="text/javascript" src="js/lib/underscore.js"></script>
   <script type="text/javascript" src="js/lib/backbone.js"></script>
   <script type="text/javascript" src="js/lib/backbone.localStorage.js"></script>
+  
+  <!-- supporting libs -->
+  <script type="text/javascript" src="js/lib/highcharts.js"></script>
   
   <!-- app -->
   <script type="text/javascript" src="js/bootstrap.js"></script>
