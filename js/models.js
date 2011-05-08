@@ -23,6 +23,10 @@
     MetricData: Backbone.Collection.extend({
       model: BIG.Models.Metric,
       localStorage: new Store("metrics")
+    }),
+    ChartSeries: Backbone.Collection.extend({
+      model: BIG.Models.Metric,
+      localStorage: new Store("chart")
     })
   };
    
@@ -30,6 +34,7 @@
   BIG.Companies      = new BIG.Collections.Companies;
   BIG.Results        = new BIG.Collections.Results;
   BIG.MetricData     = new BIG.Collections.MetricData;
+  BIG.ChartSeries    = new BIG.Collections.ChartSeries;
   
   BIG._loadData = function() {
     _.each(

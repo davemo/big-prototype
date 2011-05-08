@@ -86,20 +86,8 @@
         $("body").attr("id", "chart");
         
         $(self.el).html(self.template());
-        
-        var uriTpl = 'http://api.worldbank.org/countries/<%= countries %>/indicators/<%= indicator %>?per_page=100&date=1960:2011&format=json'
-        var url = _.template(uriTpl, {
-          countries: self.countries,
-          indicator: self.indicator
-        });
-        
-        // YUI.use('jsonp', function(Y) {
-        //   Y.jsonp(url, function(response) {
-        //     debugger;
-        //   });
-        // });
 
-        new Highcharts.Chart({
+        BIG.Chart = new Highcharts.Chart({
           chart: {
               renderTo: 'chart-container'
            },

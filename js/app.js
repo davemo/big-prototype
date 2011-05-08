@@ -3,8 +3,8 @@
   BIG.contentContainer = "#body";
   
   BIG.Metrics = [
-    {name: 'GDP', value: 'NY.GDP.MKTP.CD'},
-    {name: 'GNI', value: 'NY.GNP.MKTP.CD'}
+    {name: 'GDP', code: 'NY.GDP.MKTP.CD', descriptor: 'GNI (current US$)'},
+    {name: 'GNI', code: 'NY.GNP.MKTP.CD', descriptor: 'GDP (current US$)'}
     //{name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
     //{name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
     //{name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
