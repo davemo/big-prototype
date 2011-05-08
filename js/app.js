@@ -19,25 +19,9 @@
     'Charting #/chart' 
   ];
     
-  BIG._renderSearchBox = function(container, type, placeholder) {
-    $(container).prepend(_.template($("#search-template").html(), {
-      type: type, 
-      placeholder: placeholder
-    }));
-  };
-  
-  BIG._renderNav = function(container, navs) {
-    var rendered = "";
-    _.each(navs, function(nav) {
-      var chunks = nav.split(" ");
-      var link = _.last(chunks);
-      rendered += _.template($("#nav-template").html(), {
-        link: link,
-        name: _.without(chunks, link).join(" ")
-      });
-    });
-    $(container).append(rendered);
-  };
+  _.each([BIG.MetricData, BIG.Countries], function(collection) {
+    collection.fetch();
+  });  
     
   BIG.Controller = new (Backbone.Controller.extend({
     routes: {
@@ -79,20 +63,27 @@
     },
     
     chart: function(countries, metric) {
-      // do a lookup in the metric
       var d = BIG.MetricData.get(countries + ":" + metric);
+      var transposed = BIG._transformMetricToChartSeries(d);      
       
       if(d) {
-        new BIG.Views.Chart({
+        BIG.ChartSeries.add(new BIG.Models.Metric(transposed));
+        var chartView = new BIG.Views.Chart({
           countries: countries,
           metric: metric,
-          series: BIG._transformMetricToChartSeries(d)
-        }).render();
+          series: transposed,
+          collection: BIG.ChartSeries
+        });
+        
         new BIG.Views.ChartSearch({
           type: 'chart',
           placeholder: 'Add Countries...',
-          metrics: BIG.Metrics
+          metrics: BIG.Metrics,
+          collection: BIG.ChartSeries,
+          chartView: chartView
         }).render();
+        
+        chartView.render();
       } else {
         new BIG.Views.Error().render({
           title: 'Oops...',
@@ -114,12 +105,33 @@
         return {
           name: fact.date,
           x: Date.parse(fact.date),
-          y: parseFloat(fact.value, 10) || 0
+          y: parseFloat(fact.value, 10) || null
         }
       })
     };
     return transposed;
   };
+  
+  BIG._renderSearchBox = function(container, type, placeholder) {
+    $(container).prepend(_.template($("#search-template").html(), {
+      type: type, 
+      placeholder: placeholder
+    }));
+  };
+  
+  BIG._renderNav = function(container, navs) {
+    var rendered = "";
+    _.each(navs, function(nav) {
+      var chunks = nav.split(" ");
+      var link = _.last(chunks);
+      rendered += _.template($("#nav-template").html(), {
+        link: link,
+        name: _.without(chunks, link).join(" ")
+      });
+    });
+    $(container).append(rendered);
+  };
+  
 
   Backbone.history.start();
   

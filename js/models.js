@@ -84,7 +84,7 @@
                   value: raw.value
                 }
               })
-            };          
+            };
 
             var entity = new metric.model(transposed);
             BIG[metric.collection].add(entity);

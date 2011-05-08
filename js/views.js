@@ -75,11 +75,20 @@
       
       initialize: function(attrs) {
         _.bindAll(this, 'render');
+        
+        this.collection.bind('add', this.addSeries);
+        
         this.countries = attrs.countries;
+        
         this.metric = _.select(BIG.Metrics, function(metric) {
           return metric.name === attrs.metric;
         })[0];
+        
         this.series = attrs.series;
+      },
+      
+      addSeries: function(series) {
+        BIG.Chart.addSeries(series.toJSON());
       },
       
       render: function() {
@@ -96,14 +105,28 @@
               text: self.metric.name + ' by Country and Year'
            },
            xAxis: {
-             type: 'datetime'
+             type: 'datetime',
+             maxZoom: 24 * 3600 * 1000 * 365 * 10, // 10 years in millis
+             dateTimeLabelFormats:{
+               year: '%Y'
+             }
            },
            yAxis: {
               title: {
                  text: self.metric.descriptor
-              }
+              },
+              minPadding: 0
            },
-           series: [self.series]
+           series: [self.series],
+           tooltip: {
+           formatter : function() {
+               return 'Year'  
+                   + ': <strong>' + this.point.name + '</strong>' 
+                   + '<br/>' 
+                   + self.metric.name 
+                   + ': <strong>'  + this.point.y + '</strong>';
+             }
+           }
         });
       }
     }),
@@ -113,18 +136,21 @@
       el: '#controls .search',
       
       events: {
-        "keydown input"  : "search",
-        "focusout input" : "hideResults",
-        "change select"  : "swapMetric"
+        "keydown input"       : "search",
+        "focusout input"      : "hideResults",
+        "change select"       : "swapMetric",
+        "click .results li a" : "addCountry"
       },
       
       template: _.template($("#search-template").html()),
       resultsTemplate: _.template($("#search-results-template").html()),
       
       initialize: function(opts) {
+        _.bindAll(this, 'addCountry');
         this.type = opts.type;
         this.placeholder = opts.placeholder;
         this.metrics = opts.metrics;
+        this.chartView = opts.chartView;
       },
       
       render: function() {
@@ -136,6 +162,14 @@
         }));
       },
       
+      addCountry: function(e) {
+        e.preventDefault();
+        var cid = $(e.currentTarget).attr("href");
+        var raw = BIG.MetricData.get(cid + ":" + this.chartView.metric.name);
+        var transposed = BIG._transformMetricToChartSeries(raw);
+        this.collection.add(new BIG.Models.Metric(transposed));
+      },
+      
       search: function(e) {
         if(e.keyCode === 13 && this.$('input').val() !== '') {
           this.$('.results').show();
@@ -144,7 +178,8 @@
             results: _.map(_.select(BIG.Countries.toJSON(), function(country) {
               return country.name.match(query + '*');
             }), function(country) {
-              return { href: '#/country/' + country.id, display: country.name };
+              return { href: country.id, display: country.name };
+              // return { href: '#/country/' + country.id, display: country.name }; // TODO: use this for regular search box
             })
           }));
         }
