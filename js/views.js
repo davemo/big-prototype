@@ -79,6 +79,7 @@
         this.metric = _.select(BIG.Metrics, function(metric) {
           return metric.name === attrs.metric;
         })[0];
+        this.series = attrs.series;
       },
       
       render: function() {
@@ -86,31 +87,25 @@
         $("body").attr("id", "chart");
         
         $(self.el).html(self.template());
-        
+                        
         BIG.Chart = new Highcharts.Chart({
-          chart: {
+           chart: {
               renderTo: 'chart-container'
            },
            title: {
-              text: self.metric.name
+              text: self.metric.name + ' by Country and Year'
            },
            xAxis: {
-              categories: ['Apples', 'Bananas', 'Oranges']
+             type: 'datetime'
            },
            yAxis: {
               title: {
-                 text: 'Fruit eaten'
+                 text: self.metric.descriptor
               }
            },
-           series: [{
-              name: 'Jane',
-              data: [1, 0, 4]
-           }, {
-              name: 'John',
-              data: [5, 7, 3]
-           }]
+           series: [self.series]
         });
-        }      
+      }
     }),
     
     ChartSearch: Backbone.View.extend({

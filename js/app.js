@@ -3,8 +3,8 @@
   BIG.contentContainer = "#body";
   
   BIG.Metrics = [
-    {name: 'GDP', code: 'NY.GDP.MKTP.CD', descriptor: 'GNI (current US$)'},
-    {name: 'GNI', code: 'NY.GNP.MKTP.CD', descriptor: 'GDP (current US$)'}
+    {name: 'GDP', code: 'NY.GDP.MKTP.CD', descriptor: 'GDP (current US$)'},
+    {name: 'GNI', code: 'NY.GNP.MKTP.CD', descriptor: 'GNI (current US$)'}
     //{name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
     //{name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
     //{name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
@@ -84,12 +84,13 @@
       
       if(d) {
         new BIG.Views.Chart({
-          data: d,
-          metric: metric
+          countries: countries,
+          metric: metric,
+          series: BIG._transformMetricToChartSeries(d)
         }).render();
         new BIG.Views.ChartSearch({
           type: 'chart',
-          placeholder: 'Search for Countries...',
+          placeholder: 'Add Countries...',
           metrics: BIG.Metrics
         }).render();
       } else {
@@ -104,6 +105,21 @@
       
     }
   }))();
+  
+  BIG._transformMetricToChartSeries = function(raw) {
+    var metric = raw.toJSON();
+    var transposed = {
+      name: metric.country.value,
+      data: _.map(metric.data, function(fact) {
+        return {
+          name: fact.date,
+          x: Date.parse(fact.date),
+          y: parseFloat(fact.value, 10) || 0
+        }
+      })
+    };
+    return transposed;
+  };
 
   Backbone.history.start();
   
