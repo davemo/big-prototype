@@ -183,6 +183,8 @@
       hideResults: function() {
         // THIS IS DUPLICATED WITH LOGIC IN CHARTSEARCH VIEW
         var self = this;
+        this.$('input').val('');
+
         _.delay(function() {
           self.$('.results').hide();
         }, 1000);
@@ -249,6 +251,7 @@
       
       hideResults: function() {
         var self = this;
+        this.$('input').val('');
         _.delay(function() {
           self.$('.results').hide();
         }, 1000);
