@@ -23,8 +23,8 @@
   BIG._loadMetrics = function() {
     _.each(
       [
-        { collection: "MetricData"  , model: BIG.Models.Metric, name: "GDP"  },
-        { collection: "MetricData"  , model: BIG.Models.Metric, name: "GNI"  }
+        { collection: "MetricData", name: "GDP"  },
+        { collection: "MetricData", name: "GNI"  }
       ],
       function(metric) {
         
@@ -50,7 +50,7 @@
               })
             };
 
-            var entity = new metric.model(transposed);
+            var entity = new BIG.Models.Metric(transposed);
             BIG[metric.collection].add(entity);
             entity.save();
           });
