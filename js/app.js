@@ -63,10 +63,9 @@
     },
     
     chart: function(countries, metric) {
-      var d = BIG.MetricData.get(countries + ":" + metric);
-      var transposed = BIG._transformMetricToChartSeries(d);      
-      
+      var d = BIG.MetricData.get(countries + ":" + metric);      
       if(d) {
+        var transposed = BIG._transformMetricToChartSeries(d);      
         BIG.ChartSeries.add(new BIG.Models.Metric(transposed));
         var chartView = new BIG.Views.Chart({
           countries: countries,
