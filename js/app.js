@@ -38,10 +38,6 @@
     });
     $(container).append(rendered);
   };
-  
-  _.each([BIG.Countries, BIG.Companies, BIG.Results], function(collection) {
-    collection.fetch();
-  });
     
   BIG.Controller = new (Backbone.Controller.extend({
     routes: {
@@ -83,15 +79,25 @@
     },
     
     chart: function(countries, metric) {
-      new BIG.Views.Chart({
-        countries: countries,
-        metric: metric
-      }).render();
-      new BIG.Views.ChartSearch({
-        type: 'chart',
-        placeholder: 'Search for Countries...',
-        metrics: BIG.Metrics
-      }).render();
+      // do a lookup in the metric
+      var d = BIG.MetricData.get(countries + ":" + metric);
+      
+      if(d) {
+        new BIG.Views.Chart({
+          data: d,
+          metric: metric
+        }).render();
+        new BIG.Views.ChartSearch({
+          type: 'chart',
+          placeholder: 'Search for Countries...',
+          metrics: BIG.Metrics
+        }).render();
+      } else {
+        new BIG.Views.Error().render({
+          title: 'Oops...',
+          details: 'We have not loaded data for ' + countries + ' yet.\n We only have data for Canada, USA, Brazil, India and China'
+        });
+      }
     },
     
     defaultRoute: function(actions) {

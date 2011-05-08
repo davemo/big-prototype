@@ -86,7 +86,7 @@
         $("body").attr("id", "chart");
         
         $(self.el).html(self.template());
-
+        
         BIG.Chart = new Highcharts.Chart({
           chart: {
               renderTo: 'chart-container'

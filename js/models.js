@@ -44,7 +44,10 @@
       function(dataType) {
         $.getJSON('static-data/wb.' + dataType.collection.toLowerCase() + '.json', function(response) {
           _.each(response, function(entityData) {
-            var entity = new dataType.model(entityData);
+            var transposed = _.extend(entityData, {
+              id: entityData.iso2Code
+            });
+            var entity = new dataType.model(transposed);
             BIG[dataType.collection].add(entity);
             entity.save();
           });
