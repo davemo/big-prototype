@@ -4,13 +4,13 @@
   
   BIG.Metrics = [
     {name: 'GDP', value: 'NY.GDP.MKTP.CD'},
-    {name: 'GNI', value: 'NY.GNP.MKTP.CD'},
-    {name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
-    {name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
-    {name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
-    {name: 'Import of Goods and Services', value: 'NE.IMP.GNFS.ZS'},
-    {name: 'Export of Goods and Services', value: 'NE.EXP.GNFS.ZS'},
-    {name: 'Population Growth', value: 'SP.POP.GROW'}
+    {name: 'GNI', value: 'NY.GNP.MKTP.CD'}
+    //{name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
+    //{name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
+    //{name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
+    //{name: 'Import of Goods and Services', value: 'NE.IMP.GNFS.ZS'},
+    //{name: 'Export of Goods and Services', value: 'NE.EXP.GNFS.ZS'},
+    //{name: 'Population Growth', value: 'SP.POP.GROW'}
   ];
   
   BIG._defaultNavs = [
