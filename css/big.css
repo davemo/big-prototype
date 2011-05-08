@@ -60,6 +60,7 @@ h3 {
   color: #1A1D1C;
   font-weight: bold;
   font-size: 1.3em;
+  margin-bottom: 1em;
 }
 
 /** links **/
@@ -321,7 +322,7 @@ body {
   display: block;
   width: 100%;
   font-size: 0.9em;
-  margin-top: 8px;
+  margin-bottom: 8px
 }
 
 .country.sidebar .info-item {
