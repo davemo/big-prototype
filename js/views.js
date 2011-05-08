@@ -15,6 +15,7 @@
       },
 
       render: function() {
+        $("body").attr("id", "country");
         var country = this.model.toJSON();
         $(this.el).html(this.template({
           country: country,
@@ -60,6 +61,7 @@
       },
       
       render: function() {
+        $("body").attr("id", "home");
         $(this.el).html(this.template());
       }
       
@@ -71,20 +73,38 @@
       
       template: _.template($("#chart-template").html()),
       
-      initialize: function(chartSeries) {
+      initialize: function(attrs) {
         _.bindAll(this, 'render');
-        this.chartSeries = chartSeries;
+        this.countries = attrs.countries;
+        this.metric = _.select(BIG.Metrics, function(metric) {
+          return metric.name === attrs.metric;
+        })[0];
       },
       
       render: function() {
         var self = this;
+        $("body").attr("id", "chart");
+        
         $(self.el).html(self.template());
+        
+        var uriTpl = 'http://api.worldbank.org/countries/<%= countries %>/indicators/<%= indicator %>?per_page=100&date=1960:2011&format=json'
+        var url = _.template(uriTpl, {
+          countries: self.countries,
+          indicator: self.indicator
+        });
+        
+        // YUI.use('jsonp', function(Y) {
+        //   Y.jsonp(url, function(response) {
+        //     debugger;
+        //   });
+        // });
+
         new Highcharts.Chart({
           chart: {
               renderTo: 'chart-container'
            },
            title: {
-              text: 'Fruit Consumption'
+              text: self.metric.name
            },
            xAxis: {
               categories: ['Apples', 'Bananas', 'Oranges']
@@ -102,37 +122,40 @@
               data: [5, 7, 3]
            }]
         });
-      }
-      
+        }      
     }),
     
     ChartSearch: Backbone.View.extend({
       
-      el: '#chart .controls .search',
+      el: '#controls .search',
       
       events: {
-        "keydown input" : "search"
+        "keydown input"  : "search",
+        "focusout input" : "hideResults",
+        "change select"  : "swapMetric"
       },
       
       template: _.template($("#search-template").html()),
-      
       resultsTemplate: _.template($("#search-results-template").html()),
       
       initialize: function(opts) {
         this.type = opts.type;
         this.placeholder = opts.placeholder;
+        this.metrics = opts.metrics;
       },
       
       render: function() {
         var self = this;
         $(this.el).html(this.template({
           type: self.type,
-          placeholder: self.placeholder
+          placeholder: self.placeholder,
+          metrics: self.metrics
         }));
       },
       
       search: function(e) {
         if(e.keyCode === 13 && this.$('input').val() !== '') {
+          this.$('.results').show();
           var query = this.$('input').val();
           $(this.el).find('.results').html(this.resultsTemplate({
             results: _.map(_.select(BIG.Countries.toJSON(), function(country) {
@@ -142,6 +165,17 @@
             })
           }));
         }
+      },
+      
+      swapMetric: function() {
+        
+      },
+      
+      hideResults: function() {
+        var self = this;
+        _.delay(function() {
+          self.$('.results').hide();
+        }, 1000);
       }
       
     }),
@@ -159,6 +193,7 @@
       },
       
       render: function(title) {
+        $("body").attr("id", "countries");
         $(this.el).html(this.template({
           title: title,
           results: this.entities

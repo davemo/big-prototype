@@ -2,6 +2,17 @@
   
   BIG.contentContainer = "#body";
   
+  BIG.Metrics = [
+    {name: 'GDP', value: 'NY.GDP.MKTP.CD'},
+    {name: 'GNI', value: 'NY.GNP.MKTP.CD'},
+    {name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
+    {name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
+    {name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
+    {name: 'Import of Goods and Services', value: 'NE.IMP.GNFS.ZS'},
+    {name: 'Export of Goods and Services', value: 'NE.EXP.GNFS.ZS'},
+    {name: 'Population Growth', value: 'SP.POP.GROW'}
+  ];
+  
   BIG._defaultNavs = [
     'Home #/home',
     'Countries #/country', 
@@ -34,11 +45,11 @@
     
   BIG.Controller = new (Backbone.Controller.extend({
     routes: {
-      '/home'          : 'homeRoute',
-      '/country'       : 'listCountries',
-      '/country/:id'   : 'countryProfile',
-      '/chart'         : 'chart',
-      '*actions'       : 'defaultRoute'
+      '/home'                     : 'homeRoute',
+      '/country'                  : 'listCountries',
+      '/country/:id'              : 'countryProfile',
+      '/chart/:countries/:metric' : 'chart',
+      '*actions'                  : 'defaultRoute'
     },
     
     homeRoute: function() {
@@ -71,11 +82,15 @@
       }
     },
     
-    chart: function() {
-      new BIG.Views.Chart().render();
+    chart: function(countries, metric) {
+      new BIG.Views.Chart({
+        countries: countries,
+        metric: metric
+      }).render();
       new BIG.Views.ChartSearch({
         type: 'chart',
-        placeholder: 'Search for Countries...'
+        placeholder: 'Search for Countries...',
+        metrics: BIG.Metrics
       }).render();
     },
     
@@ -88,7 +103,7 @@
   
   BIG.init = (function() {
     // get rid of this stuff
-    BIG._renderSearchBox('#header', 'header', 'Search Companies, Industries, and Countries...');
+    //BIG._renderSearchBox('#header', 'header', 'Search Companies, Industries, and Countries...');
     BIG._renderNav('#main-nav', BIG._defaultNavs);
   })();  
   

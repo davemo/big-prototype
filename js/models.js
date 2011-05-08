@@ -3,7 +3,8 @@
   BIG.Models = {
     Country: Backbone.Model.extend({}),
     Company: Backbone.Model.extend({}),
-    Result: Backbone.Model.extend({})
+    Result: Backbone.Model.extend({}),
+    Metric: Backbone.Model.extend({})
   };
   
   BIG.Collections = {
@@ -19,11 +20,16 @@
       model: BIG.Models.Result,
       localStorage: new Store("results")
     }),
+    Metrics: Backbone.Collection.extend({
+      model: BIG.Models.Metric,
+      localStorage: new Store("metrics")
+    })
   };
    
   BIG.Countries   = new BIG.Collections.Countries;
   BIG.Companies   = new BIG.Collections.Companies;
   BIG.Results     = new BIG.Collections.Results;
+  BIG.Metrics     = new BIG.Collections.Metrics;
   
   BIG._loadData = function() {
     _.each(

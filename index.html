@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Business Insights: Global</title>
   <link rel="stylesheet" type="text/css" href="css/big.css" media="all">  
+  <!-- <script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js" charset="utf-8"></script> -->
+  <!-- <script type="text/javascript">
+    
+    YUI().use('jsonp');
+    
+  </script> -->
 </head>
 <body id="big">
   
@@ -18,6 +24,9 @@
 
     <ul id="main-nav" class="nav"></ul>
 
+    <div id="controls">
+      <div class="search"></div>
+    </div>
     <div id="body"></div>
 
     <div id="footer">
@@ -37,6 +46,11 @@
   <!-- Templates -->
   <script id="search-template" type="text/html">
     <div id="search-<%= type %>">
+      <select>
+        <% _.each(metrics, function(metric) { %>
+          <option value="<%= metric.value %>"><%= metric.name %></option>
+        <% }); %>
+      </select>
       <input type="text" placeholder="<%= placeholder %>" />
       <ul class="results"></ul>
     </div>
@@ -67,9 +81,6 @@
   
   <script id="chart-template" type="text/html">
     <div id="chart">
-      <div class="controls">
-        <div class="search"></div>
-      </div>
       <h3>Charting</h3>
       <div id="chart-container"></div>
     </div>
@@ -82,6 +93,11 @@
         <li><span class="info-title">Capital City:</span> <span class="info-item"><%= country.capitalCity %></span></li>
         <li><span class="info-title">Longitude: </span> <span class="info-item"><%= country.longitude %></span></li>
         <li><span class="info-title">Latitude: </span> <span class="info-item"><%= country.latitude %></span></li>
+      </ul>
+      <h3>Indicators</h3>
+      <a href="#/chart/<%= country.id %>/GDP">Chart</a>
+      <ul class="info">
+        
       </ul>
     </div>
     <article class="country-overview">
@@ -118,7 +134,7 @@
 
   <!-- let's load our initial world bank data for countries, and kick off the app -->
   <script type="text/javascript">
-    window.location.hash = "#/home";
+    //window.location.hash = "#/home";
     if(!BIG.Countries.length) {
       BIG._loadData();
     }
