@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Business Insights: Global</title>
   <link rel="stylesheet" type="text/css" href="css/big.css" media="all">  
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry&amp;sensor=false"></script>
 </head>
 <body id="big">
   
@@ -100,6 +99,7 @@
   </script>
   
   <!-- core libs -->
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry&amp;sensor=false"></script>
   <script type="text/javascript" src="js/lib/json2.js"></script>
   <script type="text/javascript" src="js/lib/jquery.js"></script>
   <script type="text/javascript" src="js/lib/jquery.pubsub.js"></script>
@@ -119,6 +119,9 @@
   <!-- let's load our initial world bank data for countries, and kick off the app -->
   <script type="text/javascript">
     window.location.hash = "#/home";
+    if(!BIG.Countries.length) {
+      BIG._loadData();
+    }
   </script>
   
 </body>
