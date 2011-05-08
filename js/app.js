@@ -1,27 +1,4 @@
 (function($, BIG) {
-  
-  BIG.contentContainer = "#body";
-  
-  BIG.Metrics = [
-    {name: 'GDP', code: 'NY.GDP.MKTP.CD', descriptor: 'GDP (current US$)'},
-    {name: 'GNI', code: 'NY.GNP.MKTP.CD', descriptor: 'GNI (current US$)'}
-    //{name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
-    //{name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
-    //{name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
-    //{name: 'Import of Goods and Services', value: 'NE.IMP.GNFS.ZS'},
-    //{name: 'Export of Goods and Services', value: 'NE.EXP.GNFS.ZS'},
-    //{name: 'Population Growth', value: 'SP.POP.GROW'}
-  ];
-  
-  BIG._defaultNavs = [
-    'Home #/home',
-    'Countries #/country', 
-    'Charting #/chart' 
-  ];
-    
-  _.each([BIG.MetricData, BIG.Countries], function(collection) {
-    collection.fetch();
-  });  
     
   BIG.Controller = new (Backbone.Controller.extend({
     routes: {
@@ -110,34 +87,21 @@
     };
     return transposed;
   };
-  
-  BIG._renderSearchBox = function(container, type, placeholder) {
-    $(container).prepend(_.template($("#search-template").html(), {
-      type: type, 
-      placeholder: placeholder
-    }));
-  };
-  
-  BIG._renderNav = function(container, navs) {
-    var rendered = "";
-    _.each(navs, function(nav) {
-      var chunks = nav.split(" ");
-      var link = _.last(chunks);
-      rendered += _.template($("#nav-template").html(), {
-        link: link,
-        name: _.without(chunks, link).join(" ")
-      });
-    });
-    $(container).append(rendered);
-  };
-  
 
   Backbone.history.start();
   
   BIG.init = (function() {
-    // get rid of this stuff
-    //BIG._renderSearchBox('#header', 'header', 'Search Companies, Industries, and Countries...');
-    BIG._renderNav('#main-nav', BIG._defaultNavs);
+    new BIG.Views.SiteSearch({
+      type: 'site',
+      placeholder: 'Search Companies, Industries, and Countries...'
+    }).render();
+    
+    new BIG.Views.Navigation({
+      links: [
+        { href: '#/home', name: 'Home' },
+        { href: '#/country', name: 'Countries' }
+      ]
+    }).render();
   })();  
   
 })(jQuery, BIG);

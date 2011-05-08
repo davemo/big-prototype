@@ -131,6 +131,65 @@
       }
     }),
     
+    Navigation: Backbone.View.extend({
+      
+      el: '#main-nav',
+      
+      template: _.template($("#nav-template").html()),
+      
+      render: function() {
+        $(this.el).html(this.template({
+          links: this.options.links
+        }));
+      }
+      
+    }),
+    
+    SiteSearch: Backbone.View.extend({
+      
+      el: '#header',
+      
+      events: {
+        "keydown input"  : "search",
+        "focusout input" : "hideResults" 
+      },
+      
+      template: _.template($("#search-template").html()),
+      resultsTemplate: _.template($("#search-results-template").html()),
+      
+      render: function() {
+        $(this.el).append(this.template({
+          placeholder: this.options.placeholder,
+          type: this.options.type,
+          metrics: []
+        }));
+      },
+      
+      search: function(e) {
+        // THIS IS DUPLICATED WITH LOGIC IN CHARTSEARCH VIEW
+        if(e.keyCode === 13 && this.$('input').val() !== '') {
+          this.$('.results').show();
+          var query = this.$('input').val();
+          $(this.el).find('.results').html(this.resultsTemplate({
+            results: _.map(_.select(BIG.Countries.toJSON(), function(country) {
+              return country.name.match(query + '*');
+            }), function(country) {
+              return { href: '#/country/' + country.id, display: country.name };
+            })
+          }));
+        }
+      },
+      
+      hideResults: function() {
+        // THIS IS DUPLICATED WITH LOGIC IN CHARTSEARCH VIEW
+        var self = this;
+        _.delay(function() {
+          self.$('.results').hide();
+        }, 1000);
+      }
+      
+    }),
+    
     ChartSearch: Backbone.View.extend({
       
       el: '#controls .search',
@@ -179,7 +238,6 @@
               return country.name.match(query + '*');
             }), function(country) {
               return { href: country.id, display: country.name };
-              // return { href: '#/country/' + country.id, display: country.name }; // TODO: use this for regular search box
             })
           }));
         }
