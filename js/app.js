@@ -44,12 +44,17 @@
       if(d) {
         var transposed = BIG._transformMetricToChartSeries(d);      
         BIG.ChartSeries.add(new BIG.Models.Metric(transposed));
+        
         var chartView = new BIG.Views.Chart({
           countries: countries,
           metric: metric,
           series: transposed,
           collection: BIG.ChartSeries
         });
+        
+        var entityControls = new BIG.Views.EntityControls({
+          collection: BIG.ChartSeries
+        }).render();
         
         new BIG.Views.ChartSearch({
           type: 'chart',
@@ -76,6 +81,7 @@
   BIG._transformMetricToChartSeries = function(raw) {
     var metric = raw.toJSON();
     var transposed = {
+      id: metric.id.split(":")[0],
       name: metric.country.value,
       data: _.map(metric.data, function(fact) {
         return {

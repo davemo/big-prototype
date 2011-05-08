@@ -263,6 +263,47 @@ body {
   width: 150px;
 }
 
+.entity-controls {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  z-index: 1;
+}
+
+.entity-controls li {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  padding: 4px;
+  border: 1px solid #999;
+  background: #EEE;
+  font-size: 12px;
+  position: relative;
+  padding-right: 15px;
+}
+
+.entity-controls li:hover {
+  background: white;
+  border: 1px solid #3c3249;
+  cursor: pointer;
+}
+
+.entity-controls .remove {
+  position: absolute;
+  right: 0px;
+  display: block;
+  width: 7px;
+  height: 7px;
+  top: 5px;
+  font-size: 1px;
+  background: url(../img/close.gif);
+  margin: 0 5px 4px 0;
+}
+
+.entity-controls li a .remove {
+  1px solid #DDD
+}
+
 #search-chart .results {
   width: 155px;
 }

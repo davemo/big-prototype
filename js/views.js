@@ -67,6 +67,26 @@
       
     }),
     
+    EntityControls: Backbone.View.extend({
+      
+      el: '.entity-controls',
+      
+      template: _.template($("#entity-controls").html()),
+      
+      initialize: function() {
+        
+      },
+      
+      render: function() {
+        var self = this;
+        $(this.el).html(this.template({
+          entities: self.collection.toJSON()
+        }));
+        // get the entities and map them to the thing this template expects
+      }
+      
+    }),
+    
     Chart: Backbone.View.extend({
       
       el: '#body',
@@ -200,14 +220,14 @@
         "keydown input"       : "search",
         "focusout input"      : "hideResults",
         "change select"       : "swapMetric",
-        "click .results li a" : "addCountry"
+        "click .results li a" : "addEntity"
       },
       
       template: _.template($("#search-template").html()),
       resultsTemplate: _.template($("#search-results-template").html()),
       
       initialize: function(opts) {
-        _.bindAll(this, 'addCountry');
+        _.bindAll(this, 'addEntity');
         this.type = opts.type;
         this.placeholder = opts.placeholder;
         this.metrics = opts.metrics;
@@ -223,12 +243,16 @@
         }));
       },
       
-      addCountry: function(e) {
+      addEntity: function(e) {
         e.preventDefault();
         var cid = $(e.currentTarget).attr("href");
         var raw = BIG.MetricData.get(cid + ":" + this.chartView.metric.name);
         var transposed = BIG._transformMetricToChartSeries(raw);
         this.collection.add(new BIG.Models.Metric(transposed));
+      },
+      
+      removeEntity: function() {
+        
       },
       
       search: function(e) {
@@ -245,7 +269,7 @@
         }
       },
       
-      swapMetric: function() {
+      swapMetric: function(e) {
         
       },
       

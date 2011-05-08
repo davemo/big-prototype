@@ -25,6 +25,7 @@
     <ul id="main-nav" class="nav"></ul>
 
     <div id="controls">
+      <div class="entity-controls"></div>
       <div class="search"></div>
     </div>
     <div id="body"></div>
@@ -48,12 +49,20 @@
     <div id="search-<%= type %>">
       <select>
         <% _.each(metrics, function(metric) { %>
-          <option value="<%= metric.value %>"><%= metric.name %></option>
+          <option value="<%= metric.code %>"><%= metric.name %></option>
         <% }); %>
       </select>
       <input type="text" placeholder="<%= placeholder %>" />
       <ul class="results"></ul>
     </div>
+  </script>
+  
+  <script id="entity-controls" type="text/html">
+    <ul>
+      <% _.each(entities, function(entity) { %>
+        <li><%= entity.name %><a href="#" data-id="<%= entity.id %>" class="remove">x</a></li>
+      <% }); %>
+    </ul>
   </script>
   
   <script id="search-results-template" type="text/html">
