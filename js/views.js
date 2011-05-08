@@ -71,10 +71,16 @@
       
       el: '.entity-controls',
       
+      events: {
+        'click .remove' : 'removeEntity'
+      },
+      
       template: _.template($("#entity-controls").html()),
       
       initialize: function() {
-        
+        _.bindAll(this, 'render', 'removeEntity');
+        this.collection.bind('add', this.render);
+        this.collection.bind('remove', this.render);
       },
       
       render: function() {
@@ -82,7 +88,15 @@
         $(this.el).html(this.template({
           entities: self.collection.toJSON()
         }));
-        // get the entities and map them to the thing this template expects
+      },
+      
+      removeEntity: function(e) {
+        e.preventDefault();
+        if(this.collection.length > 1) {
+          this.collection.remove($(e.currentTarget).attr("data-id"));
+        } else {
+          alert('You need at least 1 country to chart!');
+        }
       }
       
     }),
@@ -97,6 +111,7 @@
         _.bindAll(this, 'render');
         
         this.collection.bind('add', this.addSeries);
+        this.collection.bind('remove', this.removeSeries);
         
         this.countries = attrs.countries;
         
@@ -109,6 +124,12 @@
       
       addSeries: function(series) {
         BIG.Chart.addSeries(series.toJSON());
+      },
+      
+      removeSeries: function(series) {
+        var json = series.toJSON();
+        var series = BIG.Chart.get(json.id);
+        series.remove();
       },
       
       render: function() {

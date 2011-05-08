@@ -280,7 +280,31 @@ body {
   font-size: 12px;
   position: relative;
   padding-right: 15px;
+  float: left;
+  margin-right: 2px;
 }
+
+/*.entity-controls li:first-child {
+  padding-left: 4px;
+  margin-left: 0px;
+  z-index: 5;
+}
+
+.entity-controls li:nth-child(2) {
+  z-index: 4;
+}
+
+.entity-controls li:nth-child(3) {
+  z-index: 3;
+}
+
+.entity-controls li:nth-child(4) {
+  z-index: 2;
+}
+
+.entity-controls li:nth-child(5) {
+  z-index: 1;
+}*/
 
 .entity-controls li:hover {
   background: white;
@@ -296,7 +320,7 @@ body {
   height: 7px;
   top: 5px;
   font-size: 1px;
-  background: url(../img/close.gif);
+  background: transparent url(../img/close.gif);
   margin: 0 5px 4px 0;
 }
 
