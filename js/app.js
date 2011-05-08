@@ -48,11 +48,10 @@
         var chartView = new BIG.Views.Chart({
           countries: countries,
           metric: metric,
-          series: transposed,
           collection: BIG.ChartSeries
         });
         
-        var entityControls = new BIG.Views.EntityControls({
+        new BIG.Views.EntityControls({
           collection: BIG.ChartSeries
         }).render();
         

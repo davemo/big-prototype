@@ -81,6 +81,7 @@
         _.bindAll(this, 'render', 'removeEntity');
         this.collection.bind('add', this.render);
         this.collection.bind('remove', this.render);
+        this.collection.bind('refresh', this.render);
       },
       
       render: function() {
@@ -112,14 +113,10 @@
         
         this.collection.bind('add', this.addSeries);
         this.collection.bind('remove', this.removeSeries);
-        
-        this.countries = attrs.countries;
-        
+        this.collection.bind('refresh', this.render);        
         this.metric = _.select(BIG.Metrics, function(metric) {
           return metric.name === attrs.metric;
-        })[0];
-        
-        this.series = attrs.series;
+        })[0];        
       },
       
       addSeries: function(series) {
@@ -158,7 +155,7 @@
               },
               minPadding: 0
            },
-           series: [self.series],
+           series: self.collection.toJSON(),
            tooltip: {
            formatter : function() {
                return 'Year'  
@@ -248,7 +245,7 @@
       resultsTemplate: _.template($("#search-results-template").html()),
       
       initialize: function(opts) {
-        _.bindAll(this, 'addEntity');
+        _.bindAll(this, 'addEntity', 'swapMetric');
         this.type = opts.type;
         this.placeholder = opts.placeholder;
         this.metrics = opts.metrics;
@@ -272,10 +269,6 @@
         this.collection.add(new BIG.Models.Metric(transposed));
       },
       
-      removeEntity: function() {
-        
-      },
-      
       search: function(e) {
         if(e.keyCode === 13 && this.$('input').val() !== '') {
           this.$('.results').show();
@@ -291,7 +284,17 @@
       },
       
       swapMetric: function(e) {
-        
+        var self = this;
+        var newMetricId = $(e.currentTarget).find(":selected").text();
+        var currentModelIds = _.pluck(this.collection.models, 'id');
+        var newModels = _.map(currentModelIds, function(id) {
+          return new BIG.Models.Metric(
+            BIG._transformMetricToChartSeries(
+              BIG.MetricData.get(id + ":" + newMetricId)
+            )
+          );
+        });
+        this.collection.refresh(newModels);
       },
       
       hideResults: function() {
