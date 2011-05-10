@@ -4,12 +4,8 @@
   <meta charset="UTF-8">
   <title>Business Insights: Global</title>
   <link rel="stylesheet" type="text/css" href="css/big.css" media="all">  
-  <!-- <script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js" charset="utf-8"></script> -->
-  <!-- <script type="text/javascript">
-    
-    YUI().use('jsonp');
-    
-  </script> -->
+  <link rel="stylesheet" type="text/css" href="css/lib/jquery-ui-1.8.12.custom.css" media="all" />
+  <link rel="stylesheet" type="text/css" href="css/overrides.css" media="all" />
 </head>
 <body id="big">
   
@@ -25,8 +21,17 @@
     <ul id="main-nav" class="nav"></ul>
 
     <div id="controls">
-      <div class="entity-controls"></div>
-      <div class="search"></div>
+      <div class="swapper">
+        <label for="view-chart">Chart</label>
+        <input type="radio" id="view-chart" name="swapper" checked />
+        <label for="view-table">Table</label>
+        <input type="radio" id="view-table" name="swapper" />
+      </div>
+      <input id="show-comparison-ui" type="button" class="button" value="Add/Remove Countries "/>
+      <div class="comparison">
+        <div class="search"></div>
+        <div class="entity-controls"></div>
+      </div>
     </div>
     <div id="body"></div>
 
@@ -47,6 +52,7 @@
   <!-- Templates -->
   <script id="search-template" type="text/html">
     <div id="search-<%= type %>">
+      <h1>Search to Add</h1>
       <select>
         <% _.each(metrics, function(metric) { %>
           <option value="<%= metric.code %>"><%= metric.name %></option>
@@ -58,6 +64,7 @@
   </script>
   
   <script id="entity-controls" type="text/html">
+    <h1>Current Countries</h1>
     <ul>
       <% _.each(entities, function(entity) { %>
         <li><%= entity.name %><a href="#" data-id="<%= entity.id %>" class="remove">x</a></li>
@@ -91,9 +98,16 @@
   </script>
   
   <script id="chart-template" type="text/html">
-    <div id="chart">
+    <div class="chart">
       <h3>Charting</h3>
       <div id="chart-container"></div>
+    </div>
+  </script>
+  
+  <script type="text/html" id="table-template">
+    <div class="table">
+      <h3>Table</h3>
+      <div id="table-container"></div>
     </div>
   </script>
 
@@ -128,6 +142,7 @@
   <!-- core libs -->
   <script type="text/javascript" src="js/lib/json2.js"></script>
   <script type="text/javascript" src="js/lib/jquery.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script>
   <script type="text/javascript" src="js/lib/underscore.js"></script>
   <script type="text/javascript" src="js/lib/backbone.js"></script>
   <script type="text/javascript" src="js/lib/backbone.localStorage.js"></script>

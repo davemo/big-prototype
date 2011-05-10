@@ -116,7 +116,7 @@ body {
   background: url(../img/logo_tagline.png) no-repeat top left;
 }
 
-#stripe, #search-header, #nav, #body, #controls, .results {
+#stripe, #search-header, #nav, #body, #controls, .results, .comparison, #show-comparison-ui.open {
      -moz-box-shadow: 0px 2px 4px #9b9b9b; 
   -webkit-box-shadow: 0px 2px 4px #9b9b9b; 
           box-shadow: 0px 2px 4px #9b9b9b;
@@ -236,6 +236,9 @@ body {
     border-top-right-radius: 8px;
     display: block;
     padding: 10px;
+    padding-top: 4px;
+    display: block;
+    height: 22px;
 }
 
 #chart #body {
@@ -248,14 +251,7 @@ body {
   border: 1px solid #999;
 }
 
-#chart #controls {
-  display: block;
-  height: 22px;
-}
-
 #chart .search {
-  position: absolute;
-  right: 10px;
   z-index: 1;
 }
 
@@ -263,11 +259,41 @@ body {
   width: 150px;
 }
 
-.entity-controls {
+#show-comparison-ui {
   position: absolute;
-  left: 10px;
-  top: 8px;
+  right: 4px;
+  top: 2px;
+}
+
+#show-comparison-ui.open {
+  background: white;
+  border: 1px solid #ccc;
+}
+
+.comparison {
+  position: absolute;
+  right: 5px;
+  top: 26px;
+  padding: 10px;
+  background: #CCC;
   z-index: 1;
+  background: white;
+  border: 1px solid #ccc;
+  width: 350px;
+  display: none;
+  border-top: none;
+}
+
+.comparison .search select {
+  display: none;
+}
+
+.entity-controls {
+  float: left;
+  width: 165px;
+  border-left: 1px solid #ccc;
+  padding-left: 12px;
+  
 }
 
 .entity-controls li {
@@ -281,7 +307,8 @@ body {
   position: relative;
   padding-right: 15px;
   float: left;
-  margin-right: 2px;
+  margin: 2px;
+  width: 144px;
 }
 
 /*.entity-controls li:first-child {
@@ -324,8 +351,13 @@ body {
   margin: 0 5px 4px 0;
 }
 
-.entity-controls li a .remove {
-  1px solid #DDD
+#search-chart {
+  width: 170px;
+  float: left;
+}
+
+.comparison h1 {
+  margin-bottom: 5px;
 }
 
 #search-chart .results {
@@ -338,14 +370,12 @@ body {
 
 .results {
   position: absolute;
-  right: 0px;
+  left: 11px;
+  top: 54px;
   z-index: 2;
-  background: white;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
   max-height: 200px;
   overflow-y: auto;
+  background: white;
 }
 
 .results li a {
@@ -357,9 +387,6 @@ body {
 
 .results li a:hover {
   color: white;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
   background-color: #648FFA;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#648FFA), to(#0D67F7)); 
   background-image: -webkit-linear-gradient(top, #648FFA, #0D67F7); 

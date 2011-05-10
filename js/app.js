@@ -51,13 +51,19 @@
           collection: BIG.ChartSeries
         });
         
+        // new BIG.Views.ComparisonControls({
+        //   collection
+        // }).render();
+        
         new BIG.Views.EntityControls({
           collection: BIG.ChartSeries
         }).render();
         
+        new BIG.Views.Controls({});
+        
         new BIG.Views.ChartSearch({
           type: 'chart',
-          placeholder: 'Add Countries...',
+          placeholder: 'Search...',
           metrics: BIG.Metrics,
           collection: BIG.ChartSeries,
           chartView: chartView

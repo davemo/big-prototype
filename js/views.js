@@ -102,6 +102,48 @@
       
     }),
     
+    Controls: Backbone.View.extend({
+      
+      el: '#controls',
+      
+      defaults: {
+        
+        cpTool: '.comparison',
+        btn: '#show-comparison-ui',
+        chartBtn: '#view-chart',
+        tableBtn: '#view-table',
+        chart: '.chart',
+        table: '.table'
+      
+      },
+      
+      events: {
+        'click #show-comparison-ui' : 'toggleComparisonUI',
+        'click #view-chart' : 'showChart',
+        'click #view-table' : 'showTable'
+      },
+      
+      initialize: function() {
+        _.bindAll(this, 'showChart', 'showTable');
+      },
+      
+      toggleComparisonUI: function() {
+        $(this.defaults.cpTool).toggle();
+        $(this.defaults.btn).toggleClass('open');
+      },
+      
+      showChart: function() {
+        $(this.defaults.chart).show();
+        $(this.defaults.table).hide();
+      },
+      
+      showTable: function() {
+        $(this.defaults.table).show();
+        $(this.defaults.chart).hide();
+      }
+      
+    }),
+    
     Chart: Backbone.View.extend({
       
       el: '#body',
@@ -132,6 +174,8 @@
       render: function() {
         var self = this;
         $("body").attr("id", "chart");
+        $(".swapper").buttonset();
+        $(".button").button();
         
         $(self.el).html(self.template());
                         
@@ -230,6 +274,22 @@
       
     }),
     
+    TableView: Backbone.View.extend({
+      
+      el: '#body',
+      
+      template: _.template($("#table-template").html()),
+      
+      events: {},
+      
+      initialize: function() {},
+      
+      render: function() {
+        $(this.el).html(this.template, {});
+      }
+      
+    }),
+    
     ChartSearch: Backbone.View.extend({
       
       el: '#controls .search',
@@ -263,6 +323,7 @@
       
       addEntity: function(e) {
         e.preventDefault();
+        $('.results').toggle();
         var cid = $(e.currentTarget).attr("href");
         var raw = BIG.MetricData.get(cid + ":" + this.chartView.metric.name);
         var transposed = BIG._transformMetricToChartSeries(raw);
