@@ -146,7 +146,7 @@
     
     Chart: Backbone.View.extend({
       
-      el: '#body',
+      el: '.chart',
       
       template: _.template($("#chart-template").html()),
       
@@ -274,15 +274,17 @@
       
     }),
     
-    TableView: Backbone.View.extend({
+    Table: Backbone.View.extend({
       
-      el: '#body',
+      el: '.table',
       
       template: _.template($("#table-template").html()),
       
       events: {},
       
-      initialize: function() {},
+      initialize: function() {
+        
+      },
       
       render: function() {
         $(this.el).html(this.template, {});

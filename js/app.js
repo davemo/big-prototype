@@ -42,25 +42,26 @@
     chart: function(countries, metric) {
       var d = BIG.MetricData.get(countries + ":" + metric);      
       if(d) {
-        var transposed = BIG._transformMetricToChartSeries(d);      
-        BIG.ChartSeries.add(new BIG.Models.Metric(transposed));
-        
+        var chartTransposed = BIG._transformMetricToChartSeries(d);
+        var tableTransposed = BIG._transformMetricToTableData(d, BIG.TableData);     
+        BIG.ChartSeries.add(new BIG.Models.Metric(chartTransposed));
+      
+        new BIG.Views.Table({
+          collection: BIG.TableData
+        }).render();
+      
         var chartView = new BIG.Views.Chart({
           countries: countries,
           metric: metric,
           collection: BIG.ChartSeries
         });
-        
-        // new BIG.Views.ComparisonControls({
-        //   collection
-        // }).render();
-        
+      
         new BIG.Views.EntityControls({
           collection: BIG.ChartSeries
         }).render();
-        
+      
         new BIG.Views.Controls({});
-        
+      
         new BIG.Views.ChartSearch({
           type: 'chart',
           placeholder: 'Search...',
@@ -68,7 +69,7 @@
           collection: BIG.ChartSeries,
           chartView: chartView
         }).render();
-        
+      
         chartView.render();
       } else {
         new BIG.Views.Error().render({
@@ -97,6 +98,11 @@
       })
     };
     return transposed;
+  };
+  
+  BIG._transformMetricToTableData = function(raw, collection) {
+    var metric  = raw.toJSON();
+    return true;
   };
 
   Backbone.history.start();

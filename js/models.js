@@ -4,7 +4,11 @@
     Country: Backbone.Model.extend({}),
     Company: Backbone.Model.extend({}),
     Result: Backbone.Model.extend({}),
-    Metric: Backbone.Model.extend({})
+    Metric: Backbone.Model.extend({}),
+    TableRow: Backbone.Model.extend({
+      seriesLabel: "DEFAULT",
+      cells: []
+    })
   };
   
   BIG.Collections = {
@@ -27,6 +31,10 @@
     ChartSeries: Backbone.Collection.extend({
       model: BIG.Models.Metric,
       localStorage: new Store("chart")
+    }),
+    TableData: Backbone.Collection.extend({
+      model: BIG.Models.Metric,
+      localStorage: new Store("table")
     })
   };
    
@@ -35,5 +43,6 @@
   BIG.Results        = new BIG.Collections.Results;
   BIG.MetricData     = new BIG.Collections.MetricData;
   BIG.ChartSeries    = new BIG.Collections.ChartSeries;
+  BIG.TableData      = new BIG.Collections.TableData;
   
 })(jQuery, BIG);
