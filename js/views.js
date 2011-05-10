@@ -146,7 +146,7 @@
     
     Chart: Backbone.View.extend({
       
-      el: '.chart',
+      el: '#body',
       
       template: _.template($("#chart-template").html()),
       
@@ -178,6 +178,10 @@
         $(".button").button();
         
         $(self.el).html(self.template());
+        
+        new BIG.Views.Table({
+          collection: BIG.TableData
+        }).render();
                         
         BIG.Chart = new Highcharts.Chart({
            chart: {
@@ -276,7 +280,7 @@
     
     Table: Backbone.View.extend({
       
-      el: '.table',
+      el: '#body',
       
       template: _.template($("#table-template").html()),
       
@@ -287,7 +291,7 @@
       },
       
       render: function() {
-        $(this.el).html(this.template, {});
+        $(this.el).append(this.template, {});
       }
       
     }),

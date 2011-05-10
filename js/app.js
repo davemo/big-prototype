@@ -46,10 +46,6 @@
         var tableTransposed = BIG._transformMetricToTableData(d, BIG.TableData);     
         BIG.ChartSeries.add(new BIG.Models.Metric(chartTransposed));
       
-        new BIG.Views.Table({
-          collection: BIG.TableData
-        }).render();
-      
         var chartView = new BIG.Views.Chart({
           countries: countries,
           metric: metric,
