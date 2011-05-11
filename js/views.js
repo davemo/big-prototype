@@ -98,17 +98,14 @@
       removeEntity: function(e) {
         e.preventDefault();
         var $link = $(e.currentTarget);
-        console.log("before remove");
-        console.log(BIG.TableData.toJSON());
         if(this.collection.length > 1) {
           var index = $(".entity-controls ul li a").index($link);
+          // TODO: fix the index mismatch here
           BIG.TableData.removeSeries(index);
           this.collection.remove($link.attr("data-id"));
         } else {
           alert('You need at least 1 country to chart!');
         }
-        console.log("after remove");
-        console.log(BIG.TableData.toJSON());        
       }
       
     }),
@@ -200,10 +197,9 @@
                 
         // renders the table
         BIG.Table = new BIG.Views.Table({
+          header: self.metric.name,
           collection: BIG.TableData
-        }).render({
-          headers: this.headers
-        });
+        }).render();
                 
         // chart        
         BIG.Chart = new Highcharts.Chart({
@@ -310,8 +306,9 @@
       
       template: _.template($("#table-template").html()),
       
-      initialize: function() {
+      initialize: function(opts) {
         _.bindAll(this, 'render');
+        this.header = opts.header;
         this.collection.bind('add', this.render);
         this.collection.bind('remove', this.render);
         this.collection.bind('refresh', this.render);
@@ -319,7 +316,7 @@
       
       render: function(opts) {
         $(this.el).html(this.template({
-          headers: [],
+          header: this.header,
           rows : this.collection.toJSON()
         }));
       }

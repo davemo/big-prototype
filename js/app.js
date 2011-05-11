@@ -110,18 +110,23 @@
         id: data.date,
         cells: [{
           id: metric.id.split(":")[0] + ":" + data.date,
-          value: data.value
+          value: BIG._formatCurrency(parseFloat(data.value, 10))
         }]
       });
     });
     
     return rows;    
   };
-  
-  BIG._extractTableHeaders = function() {
-    
-  };
 
+  BIG._formatCurrency = function(data) {
+    return BIG.NumberFormatter.format(data, {
+      prefix: "$",
+      thousandsSeparator: ",",
+      decimalSeparator: ".",
+      decimalPlaces: 2
+    });
+  };
+      
   Backbone.history.start();
   
   BIG.init = (function() {

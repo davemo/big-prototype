@@ -39,7 +39,6 @@
       model: BIG.Models.Metric,
       localStorage: new Store("table"),
       addRow: function(newRowData) { // addSeries
-        console.log(newRowData);
         if(newRowData.length === this.length) {          
           _.each(this.toJSON(), function(RowModel, i) {
               RowModel.cells.push(newRowData[i].cells[0]);              
