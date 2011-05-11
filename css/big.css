@@ -368,7 +368,11 @@ body {
   width: 100%;
 }
 
-.swapper { display: none; }
+.fancy td {
+  padding: 5px;
+  margin: 2px;
+  border-bottom: 1px solid #ccc;
+}
 
 .results {
   position: absolute;

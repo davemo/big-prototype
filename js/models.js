@@ -6,8 +6,11 @@
     Result: Backbone.Model.extend({}),
     Metric: Backbone.Model.extend({}),
     TableRow: Backbone.Model.extend({
-      seriesLabel: "DEFAULT",
+      id: "YEAR",
       cells: []
+    }),
+    TableCell: Backbone.Model.extend({
+      value: "YEAR:ENTITYID"
     })
   };
   
@@ -34,7 +37,20 @@
     }),
     TableData: Backbone.Collection.extend({
       model: BIG.Models.Metric,
-      localStorage: new Store("table")
+      localStorage: new Store("table"),
+      addRow: function(newRowData) {
+        if(newRowData.length === this.length) {
+          _.each(this.toArray(), function(RowModel, i) {
+            RowModel.get('cells').push(newRowData[i].cells[0]);
+          });
+          this.trigger('refresh');
+        } else {
+          alert('something happened bad in addRow');
+        }
+        // mixed in
+        
+        //
+      }
     })
   };
    

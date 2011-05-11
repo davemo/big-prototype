@@ -43,13 +43,16 @@
       var d = BIG.MetricData.get(countries + ":" + metric);      
       if(d) {
         var chartTransposed = BIG._transformMetricToChartSeries(d);
-        var tableTransposed = BIG._transformMetricToTableData(d, BIG.TableData);     
+        BIG._transformMetricToTableData(d, BIG.TableData);
         BIG.ChartSeries.add(new BIG.Models.Metric(chartTransposed));
+        
+        var tableTransposed = BIG._transformMetricToTableData(d);
+        BIG.TableData.refresh(tableTransposed);
       
         var chartView = new BIG.Views.Chart({
           countries: countries,
           metric: metric,
-          collection: BIG.ChartSeries
+          collection: BIG.ChartSeries,
         });
       
         new BIG.Views.EntityControls({
@@ -96,9 +99,24 @@
     return transposed;
   };
   
-  BIG._transformMetricToTableData = function(raw, collection) {
+  BIG._transformMetricToTableData = function(raw) {
     var metric  = raw.toJSON();
-    return true;
+    
+    var rows = _.map(metric.data, function(data) {      
+      return {
+        id: data.date,
+        cells: [{
+          id: metric.id.split(":")[0] + ":" + data.date,
+          value: data.value
+        }]
+      };
+    });
+    
+    return rows;    
+  };
+  
+  BIG._extractTableHeaders = function() {
+    
   };
 
   Backbone.history.start();

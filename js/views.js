@@ -2,6 +2,7 @@
   
   BIG.Views = {
     
+    // COUNTRY
     Country: Backbone.View.extend({
 
       tagName: "article",
@@ -32,6 +33,7 @@
       
     }),
     
+    // ERROR
     Error: Backbone.View.extend({
       
       tagName: "div",
@@ -49,6 +51,7 @@
       
     }),
     
+    // HOME
     Home: Backbone.View.extend({
       
       tagName: "div",
@@ -67,6 +70,7 @@
       
     }),
     
+    // ENTITY CONTROLS
     EntityControls: Backbone.View.extend({
       
       el: '.entity-controls',
@@ -102,6 +106,7 @@
       
     }),
     
+    // CONTROLS
     Controls: Backbone.View.extend({
       
       el: '#controls',
@@ -144,9 +149,10 @@
       
     }),
     
+    // CHART
     Chart: Backbone.View.extend({
       
-      el: '#body',
+      el: '.chart',
       
       template: _.template($("#chart-template").html()),
       
@@ -155,10 +161,11 @@
         
         this.collection.bind('add', this.addSeries);
         this.collection.bind('remove', this.removeSeries);
-        this.collection.bind('refresh', this.render);        
+        this.collection.bind('refresh', this.render);
+                
         this.metric = _.select(BIG.Metrics, function(metric) {
           return metric.name === attrs.metric;
-        })[0];        
+        })[0];
       },
       
       addSeries: function(series) {
@@ -168,21 +175,30 @@
       removeSeries: function(series) {
         var json = series.toJSON();
         var series = BIG.Chart.get(json.id);
-        series.remove();
+        series.remove(); // highcharts api call
       },
       
       render: function() {
         var self = this;
+        
+        // TODO : Clean this up at some point.
         $("body").attr("id", "chart");
+        // inject the initial spots for both chart and table
+        $("#body").html('<div class="chart"></div><div class="table"></div>');
         $(".swapper").buttonset();
         $(".button").button();
         
+        // renders the chart
         $(self.el).html(self.template());
-        
-        new BIG.Views.Table({
+                
+        // renders the table
+        BIG.Table = new BIG.Views.Table({
           collection: BIG.TableData
-        }).render();
-                        
+        }).render({
+          headers: this.headers
+        });
+                
+        // chart        
         BIG.Chart = new Highcharts.Chart({
            chart: {
               renderTo: 'chart-container'
@@ -217,6 +233,7 @@
       }
     }),
     
+    // NAVIGATION
     Navigation: Backbone.View.extend({
       
       el: '#main-nav',
@@ -231,6 +248,7 @@
       
     }),
     
+    // SITE SEARCH
     SiteSearch: Backbone.View.extend({
       
       el: '#header',
@@ -278,24 +296,31 @@
       
     }),
     
+    // TABLE
     Table: Backbone.View.extend({
       
-      el: '#body',
+      el: '.table',
       
       template: _.template($("#table-template").html()),
       
-      events: {},
-      
       initialize: function() {
-        
+        _.bindAll(this, 'render');
+        this.collection.bind('add', this.render);
+        this.collection.bind('remove', this.render);
+        this.collection.bind('refresh', this.render);
       },
       
-      render: function() {
-        $(this.el).append(this.template, {});
+      render: function(opts) {
+        console.log('table render called');
+        $(this.el).html(this.template({
+          headers: [],
+          rows : this.collection.toJSON()
+        }));
       }
       
     }),
     
+    // CHART SEARCH
     ChartSearch: Backbone.View.extend({
       
       el: '#controls .search',
@@ -332,8 +357,12 @@
         $('.results').toggle();
         var cid = $(e.currentTarget).attr("href");
         var raw = BIG.MetricData.get(cid + ":" + this.chartView.metric.name);
+
         var transposed = BIG._transformMetricToChartSeries(raw);
         this.collection.add(new BIG.Models.Metric(transposed));
+
+        var transposedRow = BIG._transformMetricToTableData(raw);
+        BIG.TableData.addRow(transposedRow);
       },
       
       search: function(e) {
@@ -374,6 +403,7 @@
       
     }),
     
+    // LIST
     List: Backbone.View.extend({
       
       el: '#body',
