@@ -38,7 +38,7 @@
     TableData: Backbone.Collection.extend({
       model: BIG.Models.Metric,
       localStorage: new Store("table"),
-      addRow: function(newRowData) {
+      addRow: function(newRowData) { // addSeries
         if(newRowData.length === this.length) {
           _.each(this.toArray(), function(RowModel, i) {
             RowModel.get('cells').push(newRowData[i].cells[0]);
@@ -47,9 +47,13 @@
         } else {
           alert('something happened bad in addRow');
         }
-        // mixed in
-        
-        //
+      },
+      removeSeries: function(index) { // removeSeries
+        _.each(this.toArray(), function(RowModel, i) {
+          var cells = RowModel.get('cells');
+          delete cells[index];
+        });
+        this.trigger('refresh');
       }
     })
   };

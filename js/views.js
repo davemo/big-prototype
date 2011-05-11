@@ -97,8 +97,11 @@
       
       removeEntity: function(e) {
         e.preventDefault();
+        var $link = $(e.currentTarget);
         if(this.collection.length > 1) {
-          this.collection.remove($(e.currentTarget).attr("data-id"));
+          var index = $(".entity-controls ul li a").index($link);
+          BIG.TableData.removeSeries(index);
+          this.collection.remove($link.attr("data-id"));
         } else {
           alert('You need at least 1 country to chart!');
         }
@@ -311,7 +314,6 @@
       },
       
       render: function(opts) {
-        console.log('table render called');
         $(this.el).html(this.template({
           headers: [],
           rows : this.collection.toJSON()
