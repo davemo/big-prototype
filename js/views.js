@@ -98,6 +98,8 @@
       removeEntity: function(e) {
         e.preventDefault();
         var $link = $(e.currentTarget);
+        console.log("before remove");
+        console.log(BIG.TableData.toJSON());
         if(this.collection.length > 1) {
           var index = $(".entity-controls ul li a").index($link);
           BIG.TableData.removeSeries(index);
@@ -105,6 +107,8 @@
         } else {
           alert('You need at least 1 country to chart!');
         }
+        console.log("after remove");
+        console.log(BIG.TableData.toJSON());        
       }
       
     }),

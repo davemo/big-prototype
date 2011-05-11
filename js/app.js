@@ -101,15 +101,18 @@
   
   BIG._transformMetricToTableData = function(raw) {
     var metric  = raw.toJSON();
-    
-    var rows = _.map(metric.data, function(data) {      
-      return {
+    var rows = [{
+      id: "Year",
+      cells: [{id: "header", value: metric.country.value }]
+    }];
+    _.map(metric.data, function(data) {
+      rows.push({
         id: data.date,
         cells: [{
           id: metric.id.split(":")[0] + ":" + data.date,
           value: data.value
         }]
-      };
+      });
     });
     
     return rows;    

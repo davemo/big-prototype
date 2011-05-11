@@ -39,9 +39,10 @@
       model: BIG.Models.Metric,
       localStorage: new Store("table"),
       addRow: function(newRowData) { // addSeries
-        if(newRowData.length === this.length) {
-          _.each(this.toArray(), function(RowModel, i) {
-            RowModel.get('cells').push(newRowData[i].cells[0]);
+        console.log(newRowData);
+        if(newRowData.length === this.length) {          
+          _.each(this.toJSON(), function(RowModel, i) {
+              RowModel.cells.push(newRowData[i].cells[0]);              
           });
           this.trigger('refresh');
         } else {
@@ -49,9 +50,8 @@
         }
       },
       removeSeries: function(index) { // removeSeries
-        _.each(this.toArray(), function(RowModel, i) {
-          var cells = RowModel.get('cells');
-          delete cells[index];
+        _.each(this.toJSON(), function(RowModel) {
+          delete RowModel.cells[index];
         });
         this.trigger('refresh');
       }

@@ -110,13 +110,14 @@
       <table class="fancy">
         <thead>
           <tr>
-            <% _.each(headers, function(header) { %>
-              <th><%= header %></th>
+            <th><%= rows[0].id %></th>
+            <% _.each(rows[0].cells, function(header) { %>
+              <th><%= header.value %></th>
             <% }); %>
           </tr>
         </thead>
         <tbody>
-          <% _.each(rows, function(row) { %>
+          <% _.each(_.rest(rows), function(row) { %>
             <tr>
               <td><%= row.id %></td>
               <% _.each(row.cells, function(cell) { %>
