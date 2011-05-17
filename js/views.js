@@ -374,7 +374,7 @@
                 $(this.el).find('.results').html(this.resultsTemplate({
                     results: _.map(_.select(BIG.Countries.toJSON(),
                     function(country) {
-                        return country.name.match(query + '*');
+                      return country.name.toLowerCase().match(query.toLowerCase() + '*');
                     }),
                     function(country) {
                         return {
