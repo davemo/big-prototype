@@ -21,13 +21,13 @@
                 country: country,
                 type: 'Country'
             }));
-            // if(country.latitude && country.longitude) {
-            //   new google.maps.Map($("#map")[0], {
-            //     zoom: 6,
-            //     center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
-            //     mapTypeId: google.maps.MapTypeId.ROADMAP
-            //   });
-            // }
+            if(country.latitude && country.longitude) {
+              new google.maps.Map($("#map")[0], {
+                zoom: 6,
+                center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+              });
+            }
         }
 
     });
@@ -76,8 +76,8 @@
         },
 
         template: _.template($("#entity-controls").html()),
-
-        initialize: function() {
+        
+        initialize: function(attrs) {
             _.bindAll(this, 'render', 'removeEntity');
             this.collection.bind('add', this.render);
             this.collection.bind('remove', this.render);
@@ -328,10 +328,8 @@
         el: '#controls .search',
 
         events: {
-            "keydown input": "search",
-            "focusout input": "hideResults",
             "change select": "swapMetric",
-            "click .results li a": "addEntity"
+            "focusout input": "hideResults"
         },
 
         template: _.template($("#search-template").html()),
@@ -352,6 +350,47 @@
                 placeholder: self.placeholder,
                 metrics: self.metrics
             }));
+            
+            // bind autocomplete
+            $("#search-chart input").autocomplete({
+                minLength: 0,
+                source: function(request, response) {
+                  var query = request.term;
+                  if(query) {
+                    response(_.map(_.select(BIG.Countries.toJSON(),
+                    function(country) {
+                      return country.name.toLowerCase().match(query.toLowerCase() + '*');
+                    }),
+                    function(country) {
+                        return {
+                            value: country.id,
+                            label: country.name
+                        };
+                    }));
+                  } else {
+                    response([]);
+                  }
+                },
+                focus: function( event, ui ) {
+                  $("#search-chart input").val( ui.item.label );
+                  return false;
+                },
+                select: function(event, ui) {
+                  var raw = BIG.MetricData.get(ui.item.value + ":" + self.chartView.metric.name);
+
+                  var transposed = BIG._transformMetricToChartSeries(raw);
+                  self.collection.add(new BIG.Models.Metric(transposed));
+
+                  var transposedRow = BIG._transformMetricToTableData(raw);
+                  BIG.TableData.addRow(transposedRow);
+                  return false;
+                }
+            }).data( "autocomplete" )._renderItem = function( ul, item ) {
+            return $( "<li class='result'></li>" )
+                .data( "item.autocomplete", item )
+                .append( "<a href='" + item.value + "'>" + item.label + "</a>" )
+                .appendTo( ul );
+            };
         },
 
         addEntity: function(e) {
@@ -383,6 +422,12 @@
                         };
                     })
                 }));
+            } else if (e.keyCode === 40 && $(".results").is(":visible")) {
+              // down arrow 40
+              $(".results").find("li");
+            } else if (e.keyCode === 38 && $(".results").is(":visible")) {
+              // up arrow 38
+              
             }
         },
 
@@ -393,10 +438,7 @@
             var newModels = _.map(currentModelIds,
             function(id) {
                 return new BIG.Models.Metric(
-                BIG._transformMetricToChartSeries(
-                BIG.MetricData.get(id + ":" + newMetricId)
-                )
-                );
+                BIG._transformMetricToChartSeries(BIG.MetricData.get(id + ":" + newMetricId)));
             });
             this.collection.refresh(newModels);
         },
@@ -404,10 +446,6 @@
         hideResults: function() {
             var self = this;
             this.$('input').val('');
-            _.delay(function() {
-                self.$('.results').hide();
-            },
-            1000);
         }
 
     });
