@@ -21,13 +21,13 @@
                 country: country,
                 type: 'Country'
             }));
-            if(country.latitude && country.longitude) {
-              new google.maps.Map($("#map")[0], {
-                zoom: 6,
-                center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-              });
-            }
+            // if(country.latitude && country.longitude) {
+            //   new google.maps.Map($("#map")[0], {
+            //     zoom: 6,
+            //     center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
+            //     mapTypeId: google.maps.MapTypeId.ROADMAP
+            //   });
+            // }
         }
 
     });
@@ -76,7 +76,7 @@
         },
 
         template: _.template($("#entity-controls").html()),
-        
+
         initialize: function(attrs) {
             _.bindAll(this, 'render', 'removeEntity');
             this.collection.bind('add', this.render);
@@ -175,7 +175,6 @@
             var json = series.toJSON();
             var series = BIG.Chart.get(json.id);
             series.remove();
-            // highcharts api call
         },
 
         render: function() {
@@ -249,10 +248,10 @@
 
     BIG.Views.SiteSearch = Backbone.View.extend({
 
-        el: '#header',
+        el: '#header .search',
+        input: '#header .search input',
 
         events: {
-            "keydown input": "search",
             "focusout input": "hideResults"
         },
 
@@ -260,11 +259,47 @@
         resultsTemplate: _.template($("#search-results-template").html()),
 
         render: function() {
-            $(this.el).append(this.template({
-                placeholder: this.options.placeholder,
+            var self = this;
+            $(this.el).html(this.template({
+                placeholder: self.placeholder,
                 type: this.options.type,
                 metrics: []
             }));
+
+            // bind autocomplete
+            $(this.input).autocomplete({
+                minLength: 0,
+                source: function(request, response) {
+                    var query = request.term;
+                    if (query) {
+                        response(_.uniq(_.map(_.select(BIG.Countries.toJSON(),
+                        function(country) {
+                            return country.name.toLowerCase().match(query.toLowerCase() + '*');
+                        }),
+                        function(country) {
+                            return {
+                                value: country.id,
+                                label: country.name
+                            };
+                        })));
+                    } else {
+                        response([]);
+                    }
+                },
+                focus: function(event, ui) {
+                    $(this.input).val(ui.item.label);
+                    return false;
+                },
+                select: function(event, ui) {
+                    window.location.hash = '#/country/' + ui.item.value;
+                    return false;
+                }
+            }).data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li class='result'></li>")
+                .data("item.autocomplete", item)
+                .append("<a href='" + item.value + "'>" + item.label + "</a>")
+                .appendTo(ul);
+            };
         },
 
         search: function(e) {
@@ -288,37 +323,7 @@
         },
 
         hideResults: function() {
-            // THIS IS DUPLICATED WITH LOGIC IN CHARTSEARCH VIEW
-            var self = this;
             this.$('input').val('');
-
-            _.delay(function() {
-                self.$('.results').hide();
-            },
-            1000);
-        }
-
-    });
-
-    BIG.Views.Table = Backbone.View.extend({
-
-        el: '.table',
-
-        template: _.template($("#table-template").html()),
-
-        initialize: function(opts) {
-            _.bindAll(this, 'render');
-            this.header = opts.header;
-            this.collection.bind('add', this.render);
-            this.collection.bind('remove', this.render);
-            this.collection.bind('refresh', this.render);
-        },
-
-        render: function(opts) {
-            $(this.el).html(this.template({
-                header: this.header,
-                rows: this.collection.toJSON()
-            }));
         }
 
     });
@@ -350,46 +355,46 @@
                 placeholder: self.placeholder,
                 metrics: self.metrics
             }));
-            
+
             // bind autocomplete
             $("#search-chart input").autocomplete({
                 minLength: 0,
                 source: function(request, response) {
-                  var query = request.term;
-                  if(query) {
-                    response(_.map(_.select(BIG.Countries.toJSON(),
-                    function(country) {
-                      return country.name.toLowerCase().match(query.toLowerCase() + '*');
-                    }),
-                    function(country) {
-                        return {
-                            value: country.id,
-                            label: country.name
-                        };
-                    }));
-                  } else {
-                    response([]);
-                  }
+                    var query = request.term;
+                    if (query) {
+                        response(_.map(_.select(BIG.Countries.toJSON(),
+                        function(country) {
+                            return country.name.toLowerCase().match(query.toLowerCase() + '*');
+                        }),
+                        function(country) {
+                            return {
+                                value: country.id,
+                                label: country.name
+                            };
+                        }));
+                    } else {
+                        response([]);
+                    }
                 },
-                focus: function( event, ui ) {
-                  $("#search-chart input").val( ui.item.label );
-                  return false;
+                focus: function(event, ui) {
+                    $("#search-chart input").val(ui.item.label);
+                    return false;
                 },
                 select: function(event, ui) {
-                  var raw = BIG.MetricData.get(ui.item.value + ":" + self.chartView.metric.name);
+                    var raw = BIG.MetricData.get(ui.item.value + ":" + self.chartView.metric.name);
 
-                  var transposed = BIG._transformMetricToChartSeries(raw);
-                  self.collection.add(new BIG.Models.Metric(transposed));
+                    var transposed = BIG._transformMetricToChartSeries(raw);
+                    self.collection.add(new BIG.Models.Metric(transposed));
 
-                  var transposedRow = BIG._transformMetricToTableData(raw);
-                  BIG.TableData.addRow(transposedRow);
-                  return false;
+                    var transposedRow = BIG._transformMetricToTableData(raw);
+                    BIG.TableData.addRow(transposedRow);
+                    return false;
                 }
-            }).data( "autocomplete" )._renderItem = function( ul, item ) {
-            return $( "<li class='result'></li>" )
-                .data( "item.autocomplete", item )
-                .append( "<a href='" + item.value + "'>" + item.label + "</a>" )
-                .appendTo( ul );
+            }).data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li class='result'></li>")
+                .data("item.autocomplete", item)
+                .append("<a href='" + item.value + "'>" + item.label + "</a>")
+                .appendTo(ul);
             };
         },
 
@@ -413,7 +418,7 @@
                 $(this.el).find('.results').html(this.resultsTemplate({
                     results: _.map(_.select(BIG.Countries.toJSON(),
                     function(country) {
-                      return country.name.toLowerCase().match(query.toLowerCase() + '*');
+                        return country.name.toLowerCase().match(query.toLowerCase() + '*');
                     }),
                     function(country) {
                         return {
@@ -422,12 +427,6 @@
                         };
                     })
                 }));
-            } else if (e.keyCode === 40 && $(".results").is(":visible")) {
-              // down arrow 40
-              $(".results").find("li");
-            } else if (e.keyCode === 38 && $(".results").is(":visible")) {
-              // up arrow 38
-              
             }
         },
 
@@ -444,8 +443,30 @@
         },
 
         hideResults: function() {
-            var self = this;
             this.$('input').val('');
+        }
+
+    });
+
+    BIG.Views.Table = Backbone.View.extend({
+
+        el: '.table',
+
+        template: _.template($("#table-template").html()),
+
+        initialize: function(opts) {
+            _.bindAll(this, 'render');
+            this.header = opts.header;
+            this.collection.bind('add', this.render);
+            this.collection.bind('remove', this.render);
+            this.collection.bind('refresh', this.render);
+        },
+
+        render: function(opts) {
+            $(this.el).html(this.template({
+                header: this.header,
+                rows: this.collection.toJSON()
+            }));
         }
 
     });

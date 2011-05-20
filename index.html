@@ -15,6 +15,7 @@
     <div id="header" class="wrap">
       <h1 id="logo"><a href="#/home">Business Insights: Global</a></h1>
       <h2 id="tagline">Your digital resource for company data and information from around the world.</h2>
+      <div class="search"></div>
     </div>
 
     <ul id="main-nav" class="nav"></ul>
@@ -66,6 +67,12 @@
     </div>
   </script>
   
+  <script id="search-results-template" type="text/html">
+    <% _.each(results, function(result) { %>
+      <li><a href='<%= result.href %>'><%= result.display %></a></li>
+    <% }); %>
+  </script>
+  
   <script id="entity-controls" type="text/html">
     <h1>Current Countries</h1>
     <ul>
@@ -73,12 +80,6 @@
         <li><%= entity.name %><a href="#" data-id="<%= entity.id %>" class="remove">x</a></li>
       <% }); %>
     </ul>
-  </script>
-  
-  <script id="search-results-template" type="text/html">
-    <% _.each(results, function(result) { %>
-      <li><a href='<%= result.href %>'><%= result.display %></a></li>
-    <% }); %>
   </script>
   
   <script id="list-template" type="text/html">
