@@ -150,7 +150,10 @@ body {
   padding: 5px 10px 10px 10px; }
   
   #search-site input { 
-    width: 272px; } 
+    width: 272px !important; } 
+    
+  #search-site h1 {
+    display: none; }
     
   #search-site select {
     display: none;

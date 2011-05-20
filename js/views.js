@@ -261,7 +261,7 @@
         render: function() {
             var self = this;
             $(this.el).html(this.template({
-                placeholder: self.placeholder,
+                placeholder: this.options.placeholder,
                 type: this.options.type,
                 metrics: []
             }));
