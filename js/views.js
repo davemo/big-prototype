@@ -302,26 +302,6 @@
             };
         },
 
-        search: function(e) {
-            // THIS IS DUPLICATED WITH LOGIC IN CHARTSEARCH VIEW
-            if (e.keyCode === 13 && this.$('input').val() !== '') {
-                this.$('.results').show();
-                var query = this.$('input').val();
-                $(this.el).find('.results').html(this.resultsTemplate({
-                    results: _.map(_.select(BIG.Countries.toJSON(),
-                    function(country) {
-                        return country.name.toLowerCase().match(query.toLowerCase() + '*');
-                    }),
-                    function(country) {
-                        return {
-                            href: '#/country/' + country.id,
-                            display: country.name
-                        };
-                    })
-                }));
-            }
-        },
-
         hideResults: function() {
             this.$('input').val('');
         }
@@ -409,25 +389,6 @@
 
             var transposedRow = BIG._transformMetricToTableData(raw);
             BIG.TableData.addRow(transposedRow);
-        },
-
-        search: function(e) {
-            if (e.keyCode === 13 && this.$('input').val() !== '') {
-                this.$('.results').show();
-                var query = this.$('input').val();
-                $(this.el).find('.results').html(this.resultsTemplate({
-                    results: _.map(_.select(BIG.Countries.toJSON(),
-                    function(country) {
-                        return country.name.toLowerCase().match(query.toLowerCase() + '*');
-                    }),
-                    function(country) {
-                        return {
-                            href: country.id,
-                            display: country.name
-                        };
-                    })
-                }));
-            }
         },
 
         swapMetric: function(e) {
