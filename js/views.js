@@ -266,7 +266,6 @@
                 metrics: []
             }));
 
-            // bind autocomplete
             $(this.input).autocomplete({
                 minLength: 0,
                 source: function(request, response) {
@@ -311,6 +310,7 @@
     BIG.Views.ChartSearch = Backbone.View.extend({
 
         el: '#controls .search',
+        input: '#controls .search input',
 
         events: {
             "change select": "swapMetric",
@@ -337,7 +337,7 @@
             }));
 
             // bind autocomplete
-            $("#search-chart input").autocomplete({
+            $(this.input).autocomplete({
                 minLength: 0,
                 source: function(request, response) {
                     var query = request.term;
@@ -357,7 +357,7 @@
                     }
                 },
                 focus: function(event, ui) {
-                    $("#search-chart input").val(ui.item.label);
+                    $(this.input).val(ui.item.label);
                     return false;
                 },
                 select: function(event, ui) {

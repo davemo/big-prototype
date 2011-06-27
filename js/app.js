@@ -8,7 +8,7 @@
       '/chart/:countries/:metric' : 'chart',
       '*actions'                  : 'defaultRoute'
     },
-    
+        
     homeRoute: function() {
       new BIG.Views.Home().render();
     },
