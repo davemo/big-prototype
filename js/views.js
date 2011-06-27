@@ -155,7 +155,7 @@
         template: _.template($("#chart-template").html()),
 
         initialize: function(attrs) {
-            _.bindAll(this, 'render');
+            _.bindAll(this, 'render', 'addSeries', 'removeSeries');
 
             this.collection.bind('add', this.addSeries);
             this.collection.bind('remove', this.removeSeries);
@@ -348,7 +348,7 @@
                                                 
                         var metricMap = _.map(metricMatches, function(metric) {
                             return {
-                                value: metric.code,
+                                value: metric.name,
                                 label: metric.descriptor
                             };
                         });
@@ -363,8 +363,18 @@
                     return false;
                 },
                 select: function(event, ui) {
+                    var ids = _.unique(self.collection.pluck('id'));
+                    
+                    _.each(ids, function(entityId) {
+                        var metricKey = entityId + ":" + ui.item.value;
+                        self.collection.add(BIG._transformMetricToChartSeries(BIG.MetricData.get(metricKey)));
+                    });
                     // for each entity in the chart
                         // get the new metric data for that entity
+                        // self.collection.add(BIG._transformMetricToChartSeries(BIG.MetricData.get("CA:Unemployment")))
+                        
+                    // update the chart title
+                    // update the chart axis title?
                         
                     // update the collection driving the chart
                     
