@@ -27,7 +27,7 @@
         <label for="view-table">Table</label>
         <input type="radio" id="view-table" name="swapper" />
       </div>
-      <input id="show-comparison-ui" type="button" class="button" value="Add/Remove Countries "/>
+      <input id="show-comparison-ui" type="button" class="button" value="Add/Remove"/>
       <div class="comparison">
         <div class="search"></div>
         <div class="entity-controls"></div>
@@ -62,7 +62,9 @@
           <option value="<%= metric.code %>"><%= metric.name %></option>
         <% }); %>
       </select>
-      <input type="text" placeholder="<%= placeholder %>" />
+      <input class="entity-search" type="text" placeholder="Search countries..." />
+      <input class="metric-search" type="text" placeholder="Search metrics..." />
+      
       <ul class="results"></ul>
     </div>
   </script>
@@ -74,7 +76,7 @@
   </script>
   
   <script id="entity-controls" type="text/html">
-    <h1>Current Countries</h1>
+    <h1>Current</h1>
     <ul>
       <% _.each(entities, function(entity) { %>
         <li><%= entity.name %><a href="#" data-id="<%= entity.id %>" class="remove">x</a></li>

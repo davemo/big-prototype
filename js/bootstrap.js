@@ -4,8 +4,8 @@
   
   BIG.Metrics = [
     {name: 'GDP', code: 'NY.GDP.MKTP.CD', descriptor: 'GDP (current US$)'},
-    {name: 'GNI', code: 'NY.GNP.MKTP.CD', descriptor: 'GNI (current US$)'}
-    //{name: 'Unemployment Rate', value: 'SL.UEM.TOTL.ZS'},
+    {name: 'GNI', code: 'NY.GNP.MKTP.CD', descriptor: 'GNI (current US$)'},
+    {name: 'Unemployment', code: 'SL.UEM.TOTL.ZS', descriptor: 'Unemployment Rate'}
     //{name: 'Literacy Rate', value: 'SE.ADT.LITR.ZS'},
     //{name: 'Average Life Expectancy', value: 'SP.DYN.LE00.IN'},
     //{name: 'Import of Goods and Services', value: 'NE.IMP.GNFS.ZS'},

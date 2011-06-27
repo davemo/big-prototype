@@ -40,7 +40,7 @@
     },
     
     chart: function(countries, metric) {
-      var d = BIG.MetricData.get(countries + ":" + metric);      
+      var d = BIG.MetricData.get(countries + ":" + metric);
       if(d) {
         var chartTransposed = BIG._transformMetricToChartSeries(d);
         BIG._transformMetricToTableData(d, BIG.TableData);

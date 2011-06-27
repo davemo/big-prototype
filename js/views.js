@@ -21,13 +21,13 @@
                 country: country,
                 type: 'Country'
             }));
-            // if(country.latitude && country.longitude) {
-            //   new google.maps.Map($("#map")[0], {
-            //     zoom: 6,
-            //     center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
-            //     mapTypeId: google.maps.MapTypeId.ROADMAP
-            //   });
-            // }
+            if(country.latitude && country.longitude) {
+              new google.maps.Map($("#map")[0], {
+                zoom: 6,
+                center: new google.maps.LatLng(parseFloat(country.latitude, 10), parseFloat(country.longitude, 10)),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+              });
+            }
         }
 
     });
@@ -310,11 +310,12 @@
     BIG.Views.ChartSearch = Backbone.View.extend({
 
         el: '#controls .search',
-        input: '#controls .search input',
+        entitySearch: '#controls .search .entity-search',
+        metricSearch: '#controls .search .metric-search',
 
         events: {
             "change select": "swapMetric",
-            "focusout input": "hideResults"
+            "focusout .entity-search": "hideResults"
         },
 
         template: _.template($("#search-template").html()),
@@ -335,29 +336,79 @@
                 placeholder: self.placeholder,
                 metrics: self.metrics
             }));
-
-            // bind autocomplete
-            $(this.input).autocomplete({
+            
+            $(this.metricSearch).autocomplete({
                 minLength: 0,
                 source: function(request, response) {
                     var query = request.term;
                     if (query) {
-                        response(_.map(_.select(BIG.Countries.toJSON(),
-                        function(country) {
-                            return country.name.toLowerCase().match(query.toLowerCase() + '*');
-                        }),
-                        function(country) {
+                        var metricMatches = _.select(BIG.Metrics, function(metric) {
+                            return metric.name.toLowerCase().match(query.toLowerCase() + '*');
+                        });
+                                                
+                        var metricMap = _.map(metricMatches, function(metric) {
                             return {
-                                value: country.id,
-                                label: country.name
+                                value: metric.code,
+                                label: metric.descriptor
                             };
-                        }));
+                        });
+                                                
+                        response(metricMap);
                     } else {
                         response([]);
                     }
                 },
                 focus: function(event, ui) {
-                    $(this.input).val(ui.item.label);
+                    $(this.metricSearch).val(ui.item.label);
+                    return false;
+                },
+                select: function(event, ui) {
+                    // for each entity in the chart
+                        // get the new metric data for that entity
+                        
+                    // update the collection driving the chart
+                    
+                    
+                    // var raw = BIG.MetricData.get(ui.item.value + ":" + self.chartView.metric.name);
+                    // 
+                    //                     var transposed = BIG._transformMetricToChartSeries(raw);
+                    //                     self.collection.add(new BIG.Models.Metric(transposed));
+                    // 
+                    //                     var transposedRow = BIG._transformMetricToTableData(raw);
+                    //                     BIG.TableData.addRow(transposedRow);
+                    return false;
+                }                
+            }).data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li class='result'></li>")
+                .data("item.autocomplete", item)
+                .append("<a href='" + item.value + "'>" + item.label + "</a>")
+                .appendTo(ul);
+            };
+
+            // bind autocomplete
+            $(this.entitySearch).autocomplete({
+                minLength: 0,
+                source: function(request, response) {
+                    var query = request.term;
+                    if (query) {
+                        var countryMatches = _.select(BIG.Countries.toJSON(), function(country) {
+                            return country.name.toLowerCase().match(query.toLowerCase() + '*');
+                        });
+                                                
+                        var countryMap = _.map(countryMatches, function(country) {
+                            return {
+                                value: country.id,
+                                label: country.name
+                            };
+                        });
+                                                
+                        response(countryMap);
+                    } else {
+                        response([]);
+                    }
+                },
+                focus: function(event, ui) {
+                    $(this.entitySearch).val(ui.item.label);
                     return false;
                 },
                 select: function(event, ui) {

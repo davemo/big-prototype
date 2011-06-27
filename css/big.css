@@ -152,12 +152,10 @@ body {
   #search-site input { 
     width: 272px !important; } 
     
-  #search-site h1 {
+  #search-site h1,
+  #search-site select,
+  #search-site .metric-search {
     display: none; }
-    
-  #search-site select {
-    display: none;
-  }
 
 .nav li a {
   float: left;

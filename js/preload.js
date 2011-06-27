@@ -25,6 +25,10 @@
         {
             collection: "MetricData",
             name: "GNI"
+        },
+        {
+            collection: "MetricData",
+            name: "Unemployment"
         }
         ],
         function(metric) {
