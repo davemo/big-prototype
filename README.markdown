@@ -5,3 +5,15 @@
   I used working on this as an opportunity to explore more of backbone.js and what it takes to build a full application.
   
   You're free to use any of this code as you see fit ;)
+  
+# Instructions
+
+  Clone the repository, then run the included ruby serving script from your command prompt:
+  
+    $ ./serve.rb
+
+  This should open your default browser and you will see the app running.
+  
+# Support
+
+  This app runs great in Chrome, decent in Firefox and is untested in any other browsers.
