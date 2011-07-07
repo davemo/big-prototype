@@ -14,6 +14,14 @@
 
   This should open your default browser and you will see the app running.
   
+  Note: for the charting portion of the app only these 5 countries have data:
+  
+    - Brazil
+    - India
+    - China
+    - Canada
+    - United States
+  
 # Support
 
   This app runs great in Chrome, decent in Firefox and is untested in any other browsers.
