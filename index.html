@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Business Insights: Global</title>
+  <link rel="stylesheet" type="text/css" href="css/big.css" media="all">  
+  <link rel="stylesheet" type="text/css" href="css/lib/jquery-ui-1.8.12.custom.css" media="all" />
+</head>
+<body id="big">
+  
+  <div id="stripe"></div>
+  
+  <div id="wrap">
+    
+    <div id="header" class="wrap">
+      <h1 id="logo"><a href="#/home">Business Insights: Global</a></h1>
+      <h2 id="tagline">Your digital resource for company data and information from around the world.</h2>
+      <div class="search"></div>
+    </div>
+
+    <ul id="main-nav" class="nav"></ul>
+
+    <div id="controls">
+      <div class="swapper">
+        <label for="view-chart">Chart</label>
+        <input type="radio" id="view-chart" name="swapper" checked />
+        <label for="view-table">Table</label>
+        <input type="radio" id="view-table" name="swapper" />
+      </div>
+      <input id="show-comparison-ui" type="button" class="button" value="Add/Remove"/>
+      <div class="comparison">
+        <div class="search"></div>
+        <div class="entity-controls"></div>
+      </div>
+    </div>
+    
+    <div id="body">
+      <div class="chart"></div>
+      <div class="table"></div>
+    </div>
+
+    <div id="footer">
+      <span id="cengage">Cengage Learning</span>
+      <ul id="footer-nav" class="nav">
+        <li><a href="#">About Business Insights</a></li>
+        <li><a href="#">About Cengage Learning</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Copyright</a></li>
+        <li><a href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+    
+  </div>  
+  
+  <!-- Templates -->
+  <script id="search-template" type="text/html">
+    <div id="search-<%= type %>">
+      <h1>Search to Add</h1>
+      <select>
+        <% _.each(metrics, function(metric) { %>
+          <option value="<%= metric.code %>"><%= metric.name %></option>
+        <% }); %>
+      </select>
+      <input class="entity-search" type="text" placeholder="Search countries..." />
+      <input class="metric-search" type="text" placeholder="Search metrics..." />
+      
+      <ul class="results"></ul>
+    </div>
+  </script>
+  
+  <script id="search-results-template" type="text/html">
+    <% _.each(results, function(result) { %>
+      <li><a href='<%= result.href %>'><%= result.display %></a></li>
+    <% }); %>
+  </script>
+  
+  <script id="entity-controls" type="text/html">
+    <h1>Current</h1>
+    <ul>
+      <% _.each(entities, function(entity) { %>
+        <li><%= entity.name %><a href="#" data-id="<%= entity.id %>" class="remove">x</a></li>
+      <% }); %>
+    </ul>
+  </script>
+  
+  <script id="list-template" type="text/html">
+    <h3><%= title %></h3>
+    <ul class="listing">
+      <% _.each(results, function(result) { %>
+        <li><a href="<%= result.href %>"><%= result.display %></a></li>
+      <% }); %>
+    </ul>
+  </script>
+
+  <script id="nav-template" type="text/html">
+    <% _.each(links, function(link) { %> 
+      <li><a href="<%= link.href %>"><%= link.name %></a></li>
+    <% }); %>
+  </script>
+
+  <script id="home-template" type="text/html">
+    <img src="img/home.jpg" />
+  </script>
+  
+  <script id="chart-template" type="text/html">
+      <div id="chart-container"></div>
+  </script>
+  
+  <script type="text/html" id="table-template">
+      <h3><%= header %></h3>
+      <table class="fancy">
+        <thead>
+          <tr>
+            <th><%= rows[0].id %></th>
+            <% _.each(rows[0].cells, function(header) { %>
+              <th><%= header.value %></th>
+            <% }); %>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(_.rest(rows), function(row) { %>
+            <tr>
+              <td><%= row.id %></td>
+              <% _.each(row.cells, function(cell) { %>
+                <td><%= cell.value %></td>
+              <% }); %>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+  </script>
+
+  <script id="overview-template" type="text/html">
+    <div class="sidebar country">
+      <h3>Key Info</h3>
+      <ul class="info">
+        <li><span class="info-title">Capital City:</span> <span class="info-item"><%= country.capitalCity %></span></li>
+        <li><span class="info-title">Longitude: </span> <span class="info-item"><%= country.longitude %></span></li>
+        <li><span class="info-title">Latitude: </span> <span class="info-item"><%= country.latitude %></span></li>
+      </ul>
+      <h3>Indicators</h3>
+      <a href="#/chart/<%= country.id %>/GDP">Chart</a>
+      <ul class="info">
+        
+      </ul>
+    </div>
+    <article class="country-overview">
+      <h3><%= country.name %> (<%= country.iso2Code %>)</h3>
+      <p class="type"><%= type %> Overview</p>
+      <div id="map"></div>
+    </article>
+  </script>
+  
+  <script id="error-template" type="text/html">
+    <div class="error">
+      <h3><%= title %></h3>
+      <p><%= details %></p>
+    </div>
+  </script>
+  
+  <!-- core libs -->
+  <script src="js/lib/json2.js"></script>
+  <script src="js/lib/jquery.js"></script>
+  <script src="js/lib/jquery.ui.js"></script>
+  <script src="js/lib/underscore.js"></script>
+  <script src="js/lib/backbone.js"></script>
+  <script src="js/lib/backbone.localStorage.js"></script>
+  
+  <!-- supporting libs -->
+  <script src="http://maps.google.com/maps/api/js?libraries=geometry&amp;sensor=false"></script>
+  <script src="js/lib/highcharts.js"></script>
+  
+  <!-- app -->
+  <script src="js/bootstrap.js"></script>
+  <script src="js/models.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/preload.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- kick off the app -->
+  <script>
+    if(!window.location.hash) {
+      window.location.hash = "#/home";
+    }
+  </script>
+  
+  
+</body>
+</html>
