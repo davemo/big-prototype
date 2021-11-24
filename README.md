@@ -8,9 +8,9 @@
   
 # Instructions
 
-  Clone the repository, then run the included ruby serving script from your command prompt:
+  Clone the repository, then run this from your command prompt:
   
-    $ ./serve.rb
+    $ npx serve . 
 
   This should open your default browser and you will see the app running.
   
