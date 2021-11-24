@@ -3,15 +3,17 @@
     BIG._loadCountries = function() {
         $.getJSON('static-data/wb.countries.json',
         function(response) {
-            _.each(response,
-            function(country) {
+            response.filter((country) => {
+                debugger;
+                return ['Canada', 'United States', 'Brazil', 'India', 'China'].includes(country.name);
+            }).forEach((country) => {
                 var transposed = _.extend(country, {
                     id: country.iso2Code
                 });
                 var country = new BIG.Models.Country(transposed);
                 BIG.Countries.add(country);
                 country.save();
-            });
+            })
         });
     };
 
